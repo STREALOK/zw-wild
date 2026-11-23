@@ -19,11 +19,21 @@ By Rook, with Claudia, 2026. ZW = Zone Walkers. Its home: https://github.com/STR
 4. **When you open a wild page, painting or widget:** a red warning banner comes first. Wild stays off until you press «I understand, turn Wild on»; «Keep it calm» leaves it calm. A «⚠ flashing» chip stays next to the Wild switch.
 5. **When you leave it alone:** the autopilot plays its routines, but it never turns Wild on before you said yes.
 
+## Try it: three examples
+
+No account, key or sign-in is needed, and there is no service to test against: everything happens in your own conversation and folder.
+
+1. **A diagram.** `/zw-wild:wild a flowchart of how a pull request gets reviewed and merged`. Claude draws it as a zoomable mermaid widget and writes its wild twin beside it (`NAME.html` and `NAME-wild.html`): stars behind it, light running along every link, a wild button.
+2. **A web page.** `Make this page wild: C:\Users\you\site\index.html`. Claude writes `index-wild.html` beside it, with stars, embers, a fire glow and a Wild switch; `index.html` stays as it was.
+3. **A picture.** `Turn this picture into a living painting: C:\Users\you\Pictures\harbour.png`. Claude looks at the picture first, places a light on each thing in it, and writes `harbour-living.html`: lights that breathe, a caption for each thing on hover and in a tour, and, once Wild is on, flares and embers.
+
+Each one opens with the photosensitivity warning and stays calm until you press «I understand».
+
 ## What is inside
 
 | Part | What it does |
 |---|---|
-| `skills/zw-wild/SKILL.md` | The recipe and its four rules: keep the calm one, never tint the art, keep private pages off shared ones, look before you say. |
+| `skills/zw-wild/SKILL.md` | The recipe and its five rules: keep the calm one, never tint the art, keep private pages off shared ones, look before you say, and warn everywhere. |
 | `commands/wild.md` | `/zw-wild:wild <thing>`, which runs the skill on what you name. |
 | `skills/zw-wild/scripts/wildify.py` | `new` fills the widget template, `widget` adds the wild layer to a widget, `page` adds the campfire and the autopilot to a page, `painting` makes a picture a living painting. It writes new files only (`--update` refreshes only its own living paintings). Python 3, standard library, `--help` and `--selftest`. |
 | `skills/zw-wild/reference/*.md` | The same code again, each file as one fenced block in Markdown, for the copy of the plugin that can only carry Markdown (the directory version). `wildify.py --ref` reads its assets from there. |
@@ -48,6 +58,12 @@ Use one route at a time, never both.
 - It collects no data and calls nothing on the network. The one exception is the widget template, which loads the mermaid library from esm.sh, as the Claude app itself does.
 - It never writes over a file.
 - Everything honours `prefers-reduced-motion`.
+
+## Support and security
+
+- **Questions, bugs, ideas:** https://github.com/STREALOK/zw-wild/issues
+- **A security problem:** see `SECURITY.md`.
+- **Privacy:** see `PRIVACY.md`. In short: nothing is collected and nothing is sent.
 
 ## Licence
 
