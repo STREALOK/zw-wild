@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<!-- zw-wild living painting, made by «wildify.py painting». The picture is shown in place, unchanged. Everything that moves
+     is drawn over it, where its thing sits: lights that breathe, drifting motes, glints, a caption for each thing on hover
+     or in the tour; in Wild, flares and embers, halos, rising words and speech bubbles. Reduced motion honoured.
+     Part of zw-wild (Rook, with Claudia, 2026), AGPL-3.0. -->
+<style>
+  :root { --bg:#15131c; --ink:#ece6ff; --dim:#a99fc4; --vio:#b48cff; --fire:#ffb347; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:var(--bg); color:var(--ink); font-family:"Segoe UI", system-ui, sans-serif; }
+  #sky { position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+  main { position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:2rem 1rem 4rem; perspective:1800px; }
+  h1 { margin:0 0 .3rem; font-weight:600; }
+  .lead { margin:0 0 1.2rem; color:var(--dim); max-width:62rem; line-height:1.45; }
+  .frame { padding:14px; background:linear-gradient(145deg, #4a3320, #2a1c10); border-radius:6px; box-shadow:0 24px 60px rgba(0,0,0,.6), inset 0 0 0 1px #7a5530; width:min(100%, 140vh); margin:0 auto; transition:transform .25s ease-out; }
+  .stage { position:relative; aspect-ratio:3/2; overflow:hidden; background:#000; }
+  .scene { position:absolute; inset:0; transform-origin:55% 45%; will-change:transform; }
+  .scene img { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  #fx { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; mix-blend-mode:screen; }
+  .hot { position:absolute; width:8%; aspect-ratio:1; transform:translate(-50%, -50%); border-radius:50%; cursor:help; }
+  .hot::after { content:''; position:absolute; inset:34%; border-radius:50%; border:1.5px solid rgba(255,190,110,0); transition:border-color .3s, inset .3s; }
+  .hot.on::after, .hot:hover::after { border-color:rgba(255,200,130,.9); inset:16%; }
+  .bubble { position:absolute; pointer-events:none; background:#f6ead8; color:#2a1c10; font:700 .9rem Georgia, serif; padding:.15rem .55rem; border-radius:10px; transform:translate(-50%, -100%) scale(.2); opacity:0; transition:transform .25s cubic-bezier(.2,1.6,.4,1), opacity .25s; white-space:nowrap; }
+  .bubble.show { transform:translate(-50%, -135%) scale(1); opacity:1; }
+  #cap { min-height:3.2em; margin:1rem auto 0; max-width:60rem; text-align:center; font-size:1.02rem; line-height:1.5; }
+  #cap b { color:var(--fire); font-weight:600; }
+  #cap span { color:var(--dim); }
+  #bar { position:fixed; right:14px; top:12px; z-index:30; display:flex; gap:8px; }
+  #bar button, #bar label { background:#221d30; color:var(--ink); border:1px solid #4a3d6e; border-radius:8px; padding:.3rem .7rem; font:inherit; font-size:.85rem; cursor:pointer; display:flex; align-items:center; gap:.35rem; }
+</style></head>
+<body>
+<canvas id="sky"></canvas>
+<div id="bar"><button id="tour" data-wild-tour>Read it thing by thing</button><label><input type="checkbox" id="wild">Wild</label></div>
+<main>
+  <h1 id="ttl"></h1>
+  <p class="lead" id="lead"></p>
+  <div class="frame" id="frame"><div class="stage" id="stage"><div class="scene" id="scene">
+    <img id="pic" alt="">
+    <canvas id="fx"></canvas>
+    <div class="bubble" id="bubble"></div>
+  </div></div></div>
+  <p id="cap"></p>
+</main>
+<script>
+const DATA = /*ZW_WILD_DATA*/{}/*END*/;
+(function () {
+  const D = DATA, SP = Array.isArray(D.spots) ? D.spots : [];
+  const $ = id => document.getElementById(id);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wildBox = $('wild'); if (new URLSearchParams(location.search).get('wild')) wildBox.checked = true;
+  const scene = $('scene'), stage = $('stage'), frame = $('frame'), cap = $('cap'), bubble = $('bubble'), pic = $('pic');
+  $('ttl').textContent = D.title || '';
+  $('lead').textContent = D.lead || 'Hover over a thing, or let the tour walk it, to read why it is there. Wild makes the lights flare.';
+  pic.alt = D.title || '';
+  function setCap(i) {
+    cap.textContent = '';
+    const b = document.createElement('b'), s = document.createElement('span');
+    if (i < 0) { b.textContent = D.title || ''; s.textContent = D.caption ? ' ' + D.caption : ''; }
+    else { b.textContent = SP[i].label || ''; s.textContent = SP[i].says ? ' · ' + SP[i].says : ''; }
+    cap.appendChild(b); cap.appendChild(s);
+  }
+  setCap(-1);
+  let sel = -1, touring = false, tourT = 0;
+  const LAB = SP.map((s, i) => i).filter(i => SP[i].label);
+  function pick(i) { sel = i; hots.forEach(h => h.e.classList.toggle('on', h.i === i)); setCap(i); }
+  const hots = LAB.map(i => {
+    const h = SP[i], e = document.createElement('div'); e.className = 'hot'; e.style.left = h.x * 100 + '%'; e.style.top = h.y * 100 + '%'; e.title = h.label || '';
+    e.addEventListener('mouseenter', () => { touring = false; pick(i); });
+    e.addEventListener('mouseleave', () => { if (!touring) pick(-1); });
+    e.addEventListener('click', () => pick(i));
+    scene.appendChild(e); return { e, i };
+  });
+  $('tour').onclick = () => { if (!LAB.length) return; touring = !touring; tourT = 0; pick(touring ? LAB[0] : -1); };
+  frame.addEventListener('mousemove', e => { if (reduce) return; const r = frame.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5; frame.style.transform = `rotateY(${(px * 5).toFixed(2)}deg) rotateX(${(-py * 4).toFixed(2)}deg)`; });
+  frame.addEventListener('mouseleave', () => { frame.style.transform = ''; });
+  const fx = $('fx'), fc = fx.getContext('2d'); let FW = 0, FH = 0;
+  function fsize() { const d = devicePixelRatio || 1, r = stage.getBoundingClientRect(); FW = r.width; FH = r.height; fx.width = FW * d; fx.height = FH * d; fc.setTransform(d, 0, 0, d, 0, 0); }
+  new ResizeObserver(fsize).observe(stage);
+  pic.onload = () => { if (pic.naturalWidth) stage.style.aspectRatio = pic.naturalWidth + '/' + pic.naturalHeight; fsize(); };
+  pic.src = D.src || '';
+  const sky = $('sky'), sc = sky.getContext('2d'); let W = 0, H = 0;
+  function ssize() { const d = devicePixelRatio || 1; W = innerWidth; H = innerHeight; sky.width = W * d; sky.height = H * d; sc.setTransform(d, 0, 0, d, 0, 0); }
+  addEventListener('resize', ssize); ssize();
+  const stars = Array.from({ length: 120 }, () => ({ x: Math.random(), y: Math.random(), r: .4 + Math.random() * 1.3, ph: Math.random() * 6.3 }));
+  const lamps = SP.filter(s => s.light === 'lamp');
+  const motes = lamps.length ? Array.from({ length: 46 }, () => { const l = lamps[Math.floor(Math.random() * lamps.length)]; return { l, x: l.x + (Math.random() - .5) * .26, y: l.y + (Math.random() - .3) * .45, vx: (Math.random() - .5) * .004, vy: -(.002 + Math.random() * .006), ph: Math.random() * 6.3, r: .6 + Math.random() * 1.2 }; }) : [];
+  const speakers = SP.filter(s => Array.isArray(s.speaks) && s.speaks.length);
+  const RISE = Array.isArray(D.rise) ? D.rise : [], AREAS = Array.isArray(D.riseAreas) && D.riseAreas.length ? D.riseAreas : [[.02, .06, .98, .45]];
+  let embers = [], names = [], glints = [], T = 0, last = performance.now(), glintT = 2, nameT = 1, bubT = 6;
+  const col = (s, dflt) => (typeof s.color === 'string' && /^\d{1,3},\d{1,3},\d{1,3}$/.test(s.color.replace(/\s/g, ''))) ? s.color.replace(/\s/g, '') : dflt;
+  function glow(x, y, r, a, c) { const g = fc.createRadialGradient(x * FW, y * FH, 1, x * FW, y * FH, Math.max(2, r * FW)); g.addColorStop(0, `rgba(${c},${a})`); g.addColorStop(1, `rgba(${c},0)`); fc.fillStyle = g; fc.fillRect(0, 0, FW, FH); }
+  function star(x, y, s, a) { fc.globalAlpha = a; fc.strokeStyle = '#fff3dc'; fc.lineWidth = 1.2; fc.beginPath(); fc.moveTo(x - s, y); fc.lineTo(x + s, y); fc.moveTo(x, y - s); fc.lineTo(x, y + s); fc.stroke(); fc.globalAlpha = 1; }
+  function tick(now) {
+    const wild = wildBox.checked && !reduce, raw = Math.min(.05, (now - last) / 1000), dt = raw * (reduce ? 0 : 1); last = now; T += dt;
+    sc.clearRect(0, 0, W, H);
+    for (const s of stars) { sc.globalAlpha = .12 + .45 * (.5 + .5 * Math.sin(T * 2 + s.ph)); sc.fillStyle = '#d9ccff'; sc.beginPath(); sc.arc(s.x * W, s.y * H, s.r, 0, 6.29); sc.fill(); }
+    const g = sc.createRadialGradient(W / 2, H + 20, 10, W / 2, H + 20, 520 * (1 + .1 * Math.sin(T * 9))); g.addColorStop(0, 'rgba(255,150,60,.24)'); g.addColorStop(1, 'rgba(255,120,40,0)'); sc.globalAlpha = 1; sc.fillStyle = g; sc.fillRect(0, 0, W, H);
+    sky.style.filter = wild ? `hue-rotate(${(Math.sin(T * .25) * 14).toFixed(1)}deg)` : '';
+    const k = (T * .04) % 1, z = 1.015 + .035 * (.5 - .5 * Math.cos(k * 6.283));
+    scene.style.transform = reduce ? '' : `scale(${z.toFixed(4)}) translate(${(Math.sin(T * .13) * .6).toFixed(2)}%, ${(Math.cos(T * .11) * .5).toFixed(2)}%)`;
+    fc.clearRect(0, 0, FW, FH);
+    SP.forEach((s, i) => {
+      if (s.light === 'lamp') { const fl = .06 * Math.sin(T * 13 + i) + .04 * Math.sin(T * 31 + 1 + i) + (wild ? .05 * Math.sin(T * 47) : 0); glow(s.x, s.y, (s.r || .1) * (1 + fl), wild ? .34 : .18, col(s, '255,175,80')); }
+      else if (s.light === 'far') { glow(s.x, s.y, wild ? .05 : .03, (wild ? .22 : .1) + .08 * Math.sin(T * 1.3 + i), col(s, '255,200,120')); if (wild) glow(s.x, s.y, .09, .06 + .06 * Math.sin(T * 1.3 + 3.1 + i), '200,170,255'); }
+      else if (s.light === 'glimmer') { glow(s.x, s.y, s.r || .014, (wild ? .5 : .22) * (.5 + .5 * Math.sin(T * 2.2 + i * 2.1)), col(s, '200,150,255')); }
+    });
+    for (const m of motes) { m.x += m.vx * dt * 6; m.y += m.vy * dt * 6 * (wild ? 2 : 1); if (m.y < m.l.y - .28 || Math.abs(m.x - m.l.x) > .16) { m.x = m.l.x + (Math.random() - .5) * .2; m.y = m.l.y + .26; } fc.globalAlpha = Math.max(0, (.25 + .5 * (.5 + .5 * Math.sin(T * 3 + m.ph))) * (1 - Math.abs(m.y - m.l.y) * 1.6)); fc.fillStyle = '#ffe2b0'; fc.beginPath(); fc.arc(m.x * FW, m.y * FH, m.r, 0, 6.29); fc.fill(); }
+    fc.globalAlpha = 1;
+    const gl = SP.filter(s => s.light === 'glint');
+    if (!reduce && gl.length) { glintT -= raw; if (glintT <= 0) { const p = gl[Math.floor(Math.random() * gl.length)]; glints.push({ x: p.x, y: p.y, life: .7 }); glintT = wild ? 1.2 + Math.random() * 1.2 : 4 + Math.random() * 4; } }
+    for (const s of glints) { s.life -= raw; const a = Math.max(0, Math.sin(Math.max(0, s.life) / .7 * Math.PI)); star(s.x * FW, s.y * FH, 6 + 8 * a, a); }
+    glints = glints.filter(s => s.life > 0);
+    if (wild) {
+      for (const l of lamps) if (Math.random() < .5 / lamps.length) embers.push({ x: l.x + (Math.random() - .5) * .01, y: l.y - (l.r || .1) * 1.5, vx: (Math.random() - .5) * .01, vy: -(.03 + Math.random() * .05), life: 2 + Math.random() * 1.5, max: 3.5 });
+      if (RISE.length) { nameT -= raw; if (nameT <= 0) { const a = AREAS[Math.floor(Math.random() * AREAS.length)]; names.push({ t: String(RISE[Math.floor(Math.random() * RISE.length)]), x: a[0] + Math.random() * (a[2] - a[0]), y: a[1] + Math.random() * (a[3] - a[1]), life: 4, max: 4 }); nameT = 1.4 + Math.random() * 1.6; } }
+      if (speakers.length) { bubT -= raw; if (bubT <= 0) { const s = speakers[Math.floor(Math.random() * speakers.length)]; bubble.textContent = String(s.speaks[Math.floor(Math.random() * s.speaks.length)]); bubble.style.left = (s.x * 100) + '%'; bubble.style.top = ((s.y - .04) * 100) + '%'; bubble.classList.add('show'); setTimeout(() => bubble.classList.remove('show'), 1600); bubT = 7 + Math.random() * 5; } }
+    }
+    for (const e of embers) { e.x += e.vx * raw + Math.sin(T * 3 + e.y * 20) * .004 * raw; e.y += e.vy * raw; e.life -= raw; fc.globalAlpha = Math.max(0, e.life / e.max); fc.fillStyle = '#ffb347'; fc.beginPath(); fc.arc(e.x * FW, e.y * FH, 1.4, 0, 6.29); fc.fill(); }
+    embers = embers.filter(e => e.life > 0 && e.y > -.05);
+    fc.font = '600 ' + Math.max(13, FW * .017).toFixed(0) + 'px "Segoe UI", sans-serif';
+    for (const n of names) { n.life -= raw; n.y -= .012 * raw; const a = Math.max(0, Math.min(1, n.life / n.max * 2, (n.max - n.life) * 2)); fc.globalAlpha = a * .9; fc.fillStyle = '#ffd59a'; fc.shadowColor = 'rgba(255,170,80,.9)'; fc.shadowBlur = 8; fc.fillText(n.t, n.x * FW, n.y * FH); fc.shadowBlur = 0; }
+    names = names.filter(n => n.life > 0); fc.globalAlpha = 1;
+    if (touring) { tourT += raw; if (tourT > (wild ? 2.8 : 4.2)) { tourT = 0; pick(LAB[(LAB.indexOf(sel) + 1) % LAB.length]); } }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+  window.WILD_ROUTINES = LAB.length ? [
+    async w => { w.say('reading the picture, thing by thing'); w.click('#tour'); await w.hold(Math.min(60000, 4500 * LAB.length + 2000)); if (w.alive()) w.click('#tour'); },
+    async w => { w.say('the lights flare'); w.wild(true); await w.hold(22000); w.wild(false); },
+    async w => { w.say('wild, and read at the same time'); w.wild(true); w.click('#tour'); await w.hold(24000); if (w.alive()) w.click('#tour'); w.wild(false); },
+  ] : [
+    async w => { w.say('the lights flare'); w.wild(true); await w.hold(22000); w.wild(false); },
+    async w => { w.say('a quiet look'); await w.hold(9000); },
+  ];
+})();
+</script>
+<script>
+/*ZW_WILD_AUTOPILOT*/
+</script>
+</body></html>

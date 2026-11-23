@@ -1,0 +1,100 @@
+<!-- zw-wild widget template: a zoomable mermaid diagram with two deep palettes (A and B), scroll-wheel zoom at the
+     cursor, drag to pan, the +, -, 1:1 and fit buttons, double-click to fit. Fill it with «wildify.py new», or by hand:
+     change only the diagram source (const body), the class lines (const classes), the render id and the legend line.
+     Zoom resizes the SVG itself, so text stays sharp at any scale. Mermaid loads from esm.sh, as in the Claude app; a
+     copy at ../devtools/vendor/mermaid/mermaid.min.js is tried when that fails, and with neither the diagram shows its
+     source. Part of zw-wild (Rook, with Claudia, 2026), AGPL-3.0. -->
+<style>
+  .pal { font: inherit; font-size: 13px; padding: 4px 10px; border-radius: 8px; border: 0.5px solid var(--border); background: transparent; color: var(--text-secondary); cursor: pointer; }
+  .pal.on { color: var(--text-primary); border-color: var(--border-stronger); background: var(--surface-1); }
+  .zb { font: inherit; font-size: 13px; padding: 2px 9px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface-1); color: var(--text-primary); cursor: pointer; }
+  #vp { position: relative; height: 560px; overflow: hidden; border: 0.5px solid var(--border); border-radius: 10px; background: #141412; cursor: grab; touch-action: none; }
+  #vp.drag { cursor: grabbing; }
+  #stage { position: absolute; left: 0; top: 0; width: max-content; }
+  #stage svg { max-width: none !important; display: block; }
+  #hud { position: absolute; right: 8px; bottom: 6px; font-size: 11px; color: #c2c0b6; background: rgba(20,20,18,.75); padding: 2px 7px; border-radius: 6px; pointer-events: none; }
+  html.sa { --border:#3a3831; --border-stronger:#55534a; --surface-1:#1f1f1d; --text-primary:#e8e6dc; --text-secondary:#9c9a92; background:#141412; color:#e8e6dc; font: 14px/1.4 system-ui, "Segoe UI", Roboto, sans-serif; }
+  html.sa body { margin: 0; padding: 12px 14px; }
+  html.sa #vp { height: calc(100vh - 92px); min-height: 320px; }
+</style>
+<script>(function(){ if (window.top !== window) return; var v = getComputedStyle(document.documentElement).getPropertyValue('--text-primary'); if (!v || !v.trim()) document.documentElement.classList.add('sa'); })();</script>
+<div style="display:flex; gap:6px; margin:0 0 8px; padding-right:64px; flex-wrap:wrap; align-items:center;">  <button class="pal on" data-k="A">A · deep</button>
+  <button class="pal" data-k="B">B · deep, brighter edges</button>
+  <span style="flex:1"></span>
+  <button class="zb" id="zi">+</button>
+  <button class="zb" id="zo">−</button>
+  <button class="zb" id="z1">1:1</button>
+  <button class="zb" id="zf">fit</button>
+</div>
+<div id="vp"><div id="stage"><div id="flowA"></div><div id="flowB" style="display:none;"></div></div><div id="hud">fit</div></div>
+<div style="margin:6px 0 0; font-size:12px; color:var(--text-secondary);">scroll wheel zooms at the cursor · drag pans · double-click resets to fit · LEGEND LINE PER DIAGRAM</div>
+<script type="module">
+let mermaid;
+try { mermaid = (await import('https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs')).default; }
+catch (e1) {
+  try { mermaid = await new Promise((ok, no) => { const sc = document.createElement('script'); sc.onload = () => ok(window.mermaid); sc.onerror = no; sc.src = '../devtools/vendor/mermaid/mermaid.min.js'; document.head.appendChild(sc); }); }
+  catch (e2) { document.getElementById('hud').textContent = 'mermaid not loaded: no internet, no vendored copy'; }
+}
+await document.fonts.ready;
+if (mermaid) mermaid.initialize({
+  startOnLoad: false, theme: 'base', fontFamily: '"anthropic-sans", sans-serif',
+  themeVariables: { darkMode: true, fontSize: '13px', fontFamily: '"anthropic-sans", sans-serif',
+    lineColor: '#9c9a92', textColor: '#e8e6dc', titleColor: '#e8e6dc', edgeLabelBackground: '#1f1f1d',
+    clusterBkg: '#1f1f1d', clusterBorder: '#888780',
+    primaryColor: '#3C3489', primaryBorderColor: '#7F77DD', primaryTextColor: '#EEEDFE' },
+});
+const palettes = {
+  A: { t1:['#7a0f2e','#ff4d7d','#ffffff'], t2:['#0f3d7a','#4da6ff','#ffffff'], t3:['#0f6b3a','#33ff99','#ffffff'],
+       his:['#4a1a7a','#c77dff','#ffffff'], rook:['#7a4a0f','#ffb84d','#ffffff'], vid:['#1f1f1f','#ffd000','#ffd000'],
+       bad:['#3a0a0a','#ff2a2a','#ffb3b3'], good:['#0a2e1a','#2aff8a','#b3ffd9'] },
+  B: { t1:['#8f0a35','#ff2f6e','#ffffff'], t2:['#0a3f8f','#2fa0ff','#ffffff'], t3:['#0a7a3f','#1fff8f','#ffffff'],
+       his:['#5a148f','#d08cff','#ffffff'], rook:['#8f5a0a','#ffc85a','#ffffff'], vid:['#111111','#ffe033','#ffe033'],
+       bad:['#4a0505','#ff1f1f','#ffc2c2'], good:['#053a1f','#1fff7f','#c2ffe0'] },
+};
+const body = `flowchart TB
+  A["BODY: the diagram goes here"] --> B["one node per class name below"]`;
+const dims = {}, svgs = {};
+const classes = `
+  class A t1
+  class B his`;
+for (const k of ['A', 'B']) {
+  const defs = Object.entries(palettes[k]).map(([n, [f, s, t]]) => `  classDef ${n} fill:${f},stroke:${s},color:${t},stroke-width:2px`).join('\n');
+  const src = body + '\n' + defs + classes;
+  const host = document.getElementById('flow' + k);
+  try {
+    const { svg } = await mermaid.render('tangle-' + k, src); host.innerHTML = svg;
+    const el = host.querySelector('svg'); const vb = el.viewBox.baseVal;
+    dims[k] = { w: vb.width, h: vb.height }; svgs[k] = el;
+    el.setAttribute('preserveAspectRatio', 'xMinYMin meet'); el.style.maxWidth = 'none';
+  } catch (e) { const pre = document.createElement('pre'); pre.style.cssText = 'font-size:12px; color:var(--text-secondary); white-space:pre-wrap; margin:0;'; pre.textContent = src; host.appendChild(pre); dims[k] = { w: 800, h: 600 }; }
+}
+document.querySelectorAll('.pal').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.pal').forEach(x => x.classList.toggle('on', x === b));
+  for (const k of ['A', 'B']) document.getElementById('flow' + k).style.display = (b.dataset.k === k) ? '' : 'none';
+}));
+let cur = 'A';
+const vp = document.getElementById('vp'), stage = document.getElementById('stage'), hud = document.getElementById('hud');
+let s = 1, tx = 0, ty = 0;
+const apply = () => {
+  for (const k of ['A', 'B']) { const el = svgs[k]; if (!el) continue; el.style.width = (dims[k].w * s) + 'px'; el.style.height = (dims[k].h * s) + 'px'; el.setAttribute('width', dims[k].w * s); el.setAttribute('height', dims[k].h * s); }
+  stage.style.transform = `translate(${tx}px,${ty}px)`; hud.textContent = Math.round(s * 100) + '%';
+};
+document.querySelectorAll('.pal').forEach(b => b.addEventListener('click', () => { cur = b.dataset.k; apply(); }));
+const size = () => dims[cur];
+const fit = () => { const { w, h } = size(); const W = vp.clientWidth, H = vp.clientHeight; s = Math.min(W / w, H / h) * 0.97; tx = (W - w * s) / 2; ty = (H - h * s) / 2; apply(); };
+const zoomAt = (f, cx, cy) => { const ns = Math.min(10, Math.max(0.1, s * f)); tx = cx - (cx - tx) * (ns / s); ty = cy - (cy - ty) * (ns / s); s = ns; apply(); };
+vp.addEventListener('wheel', e => { e.preventDefault(); const r = vp.getBoundingClientRect(); zoomAt(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+let drag = null;
+vp.addEventListener('pointerdown', e => { drag = { x: e.clientX - tx, y: e.clientY - ty }; vp.classList.add('drag'); vp.setPointerCapture(e.pointerId); });
+vp.addEventListener('pointermove', e => { if (!drag) return; tx = e.clientX - drag.x; ty = e.clientY - drag.y; apply(); });
+const up = () => { drag = null; vp.classList.remove('drag'); };
+vp.addEventListener('pointerup', up); vp.addEventListener('pointercancel', up);
+vp.addEventListener('dblclick', fit);
+const mid = () => [vp.clientWidth / 2, vp.clientHeight / 2];
+document.getElementById('zi').onclick = () => zoomAt(1.3, ...mid());
+document.getElementById('zo').onclick = () => zoomAt(1 / 1.3, ...mid());
+document.getElementById('z1').onclick = () => { const { w, h } = size(); s = 1; tx = w < vp.clientWidth ? (vp.clientWidth - w) / 2 : 0; ty = h < vp.clientHeight ? (vp.clientHeight - h) / 2 : 0; apply(); };
+document.getElementById('zf').onclick = fit;
+requestAnimationFrame(fit);
+if (document.documentElement.classList.contains('sa')) window.addEventListener('resize', fit);
+</script>
