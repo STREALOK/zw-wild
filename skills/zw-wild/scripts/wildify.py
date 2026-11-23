@@ -1,4 +1,8 @@
-"""wildify.py - make a diagram widget, a web page or a picture wild, as a new file beside the calm one (zw-wild 0.2.0).
+"""wildify.py - make a diagram widget, a web page or a picture wild, as a new file beside the calm one (zw-wild 0.3.0).
+
+!! PHOTOSENSITIVITY WARNING !! Wild output has flashing and flickering light, colour cycling and fast motion and can
+trigger seizures in people with photosensitive epilepsy; several wild things open at once make it much stronger. Every
+file this tool writes opens with that warning and keeps Wild off until the viewer accepts it. Never strip it.
 
 The calm original is never touched: every command writes a new file and refuses one that already exists, and refuses
 a file that is already wild. The one exception is --update on a living painting, which may replace only a page that
@@ -252,7 +256,7 @@ def selftest():
             ok += p == "demo.html" and 'A["calm"]' in t and "mermaid.render('demo-' + k" in t and "blue: calm" in t and not is_wild(t)
             n += 1; w = cmd_widget("demo.html")                                                              # real case
             wt = open(w, encoding="utf-8").read()
-            ok += w.endswith("demo-wild.html") and wt.startswith(t.rstrip("\n")) and LAYER_MARK in wt
+            ok += w.endswith("demo-wild.html") and wt.startswith(t.rstrip("\n")) and LAYER_MARK in wt and "PHOTOSENSITIVITY WARNING" in wt
             n += 1
             try: cmd_widget(w); r = False                                                                    # echo: wild already
             except Refused: r = True
@@ -264,7 +268,7 @@ def selftest():
             ok += r and not os.path.exists("page-wild.html")
             n += 1; pw = cmd_page("page.html")                                                               # real case
             pt = open(pw, encoding="utf-8").read()
-            ok += PAGE_MARK in pt and "zw-wild autopilot" in pt and pt.index("zw-wild campfire") < pt.lower().rindex("</body>")
+            ok += PAGE_MARK in pt and "PHOTOSENSITIVITY WARNING" in pt and "zw-wild autopilot" in pt and pt.index("zw-wild campfire") < pt.lower().rindex("</body>")
             n += 1
             try: cmd_page(pw); r = False                                                                     # echo: wild already
             except Refused: r = True
@@ -284,7 +288,7 @@ def selftest():
             lt = open(lp, encoding="utf-8").read()
             ok += (lp == "my pic-living.html" and PAINT_MARK in lt and '"src": "art/my%20pic.png"' in lt and "zw-wild autopilot" in lt
                    and "The lamp" in lt and "<\\/script> pic" in lt and "<title>Test &lt;/script&gt; pic</title>" in lt
-                   and "/*ZW_WILD_DATA*/" not in lt and "/*ZW_WILD_AUTOPILOT*/" not in lt)
+                   and "/*ZW_WILD_DATA*/" not in lt and "/*ZW_WILD_AUTOPILOT*/" not in lt and "PHOTOSENSITIVITY WARNING" in lt)
             n += 1
             try: cmd_painting([os.path.join("art", "my pic.png"), "--spots", "spots.json"]); r = False       # echo: exists, no --update
             except Refused: r = True
@@ -310,6 +314,10 @@ def selftest():
 
 
 def main(a):
+    try:
+        sys.stdout.reconfigure(errors="replace")   # a console that cannot show a character must never crash the tool
+    except Exception:
+        pass
     if not a or a[0] in ("-h", "--help", "help"):
         print(__doc__); return 0
     if a[0] == "--selftest":
@@ -330,6 +338,8 @@ def main(a):
     except OSError as e:
         print("wildify: " + str(e)); return 2
     print("wildify: wrote " + p)
+    if a[0] != "new" or "--wild" in a:
+        print("wildify: (!) it opens with the photosensitivity warning (flashing light, a seizure risk; stronger with several open at once); keep it, and say so when you share it")
     return 0
 
 

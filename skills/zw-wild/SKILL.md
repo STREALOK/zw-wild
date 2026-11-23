@@ -1,20 +1,29 @@
 ---
 name: "zw-wild"
-description: "Use when someone asks to make a diagram, widget, chart or web page «wild» (animated, alive, more motion), or runs /zw-wild:wild. Keeps the calm original whole and builds a wild twin beside it: a zoomable mermaid widget gets the wild layer (stars, light along every link, runners, breathing nodes, a wild button), a page gets the campfire (stars, embers, a Wild switch) and an autopilot that runs routines by itself. Rules: reduced motion honoured, art never tinted (only canvases), private pages never linked from shared ones, every picture looked at before a word about it, and a render checked by eye before saying it works."
+description: "Use when someone asks to make a diagram, widget, chart or web page «wild» (animated, alive, more motion), or runs /zw-wild:wild. Keeps the calm original whole and builds a wild twin beside it: a zoomable mermaid widget gets the wild layer (stars, light along every link, runners, breathing nodes, a wild button), a page gets the campfire (stars, embers, a Wild switch) and an autopilot that runs routines by itself. Rules: reduced motion honoured, art never tinted (only canvases), private pages never linked from shared ones, every picture looked at before a word about it, and a render checked by eye before saying it works. ⚠ Wild has flashing light and fast motion (a photosensitivity seizure risk), so every wild thing carries a big warning and waits for «I understand»."
 ---
 
-# zw-wild 0.2.1: make it wild
+# zw-wild 0.3.0: make it wild
+
+> **⚠ PHOTOSENSITIVITY WARNING ⚠**
+>
+> Wild mode has **flashing and flickering light, colour cycling and fast motion**. It can trigger **seizures in people with photosensitive epilepsy**.
+> It gets **much stronger when Wild is used more than once at the same time**: several wild pages or widgets open together, or Wild on top of Wild. Two or more at once escalates to truly trippy levels, on purpose.
+> Every wild page and widget shows this warning first, and Wild stays off until the viewer presses «I understand». Never strip that warning out of a page you share.
+> If you, or anyone watching, is sensitive to flashing light: keep it calm.
+
 
 Part of zw-wild (Rook, with Claudia, 2026). The code is AGPL-3.0 and these words are CC BY-SA 4.0.
 
 «Wild» means more alive: things move, glow and run by themselves. It never means louder colours on someone's art, and it never means the calm version is gone.
 
-## The four rules
+## The five rules
 
 1. **Keep the calm one whole.** Never edit the original. The wild one is a twin beside it (`NAME-wild.html`), and both stay as options. `wildify.py` refuses to write over anything.
 2. **Never tint the art.** Paintings, photos and portraits keep their own colours. A colour drift goes on the canvases, the frames and the diagram lines, never on the picture.
 3. **Private stays private.** A page that shows someone's private pictures or words is never linked from a page meant to be shared. Say which is which.
 4. **Look, then say.** Look at every picture by eye before writing a word about it. Render the wild result (a headless browser is enough), look at the shot, and say plainly what you did not watch (for example, a timer that fires after the shot).
+5. **Warn, everywhere.** Every wild page and widget carries the photosensitivity warning and keeps Wild off until the viewer accepts it; the autopilot never turns Wild on before that. Never strip the warning out, and say it again in the reply whenever you hand someone a wild thing, louder when several are open at once.
 
 ## A mermaid diagram: the widget and its wild layer
 

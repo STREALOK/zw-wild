@@ -1,4 +1,11 @@
-# zw-wild 0.2.1
+# zw-wild 0.3.0
+
+> **⚠ PHOTOSENSITIVITY WARNING ⚠**
+>
+> Wild mode has **flashing and flickering light, colour cycling and fast motion**. It can trigger **seizures in people with photosensitive epilepsy**.
+> It gets **much stronger when Wild is used more than once at the same time**: several wild pages or widgets open together, or Wild on top of Wild. Two or more at once escalates to truly trippy levels, on purpose.
+> Every wild page and widget shows this warning first, and Wild stays off until the viewer presses «I understand». Never strip that warning out of a page you share.
+> If you, or anyone watching, is sensitive to flashing light: keep it calm.
 
 Make diagrams, widgets, web pages and pictures **wild**: alive, glowing, moving by themselves. The calm original is never touched; the wild one is a twin beside it.
 
@@ -25,6 +32,8 @@ By Rook, with Claudia, 2026. ZW = Zone Walkers. Its home: https://github.com/STR
 Use one route at a time, never both.
 
 ## What it never does
+
+- It never turns Wild on before the photosensitivity warning has been accepted, not even through the autopilot.
 
 - It has no hooks, so nothing fires on its own.
 - It collects no data and calls nothing on the network. The one exception is the widget template, which loads the mermaid library from esm.sh, as the Claude app itself does.

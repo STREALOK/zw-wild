@@ -6,6 +6,8 @@
    routine gets a helper w: w.say(text), await w.hold(ms), w.alive(), w.wild(true|false), w.box(id, true|false),
    w.click(selector), w.$(id). Without its own routines a page gets the generic ones below. A routine that throws is
    skipped, never retried in a loop.
+   ⚠ PHOTOSENSITIVITY: the autopilot never turns Wild on before the page's photosensitivity warning has been accepted
+   (Wild has flashing light and fast motion; it can trigger seizures in people with photosensitive epilepsy).
    Part of zw-wild (Rook, with Claudia, 2026), AGPL-3.0. */
 (function () {
   if (window.__zwAutopilot) return;
@@ -49,7 +51,12 @@
   function helper(g) {
     return {
       say, $, alive: () => alive(g), hold: ms => hold(g, ms),
-      wild: v => (window.zwWild ? window.zwWild.set(v) : setBox('wild', v)),
+      wild: v => {
+        let ok = !!(window.zwWild && window.zwWild.accepted);
+        if (!window.zwWild) { try { ok = localStorage.getItem('zw-wild-photosensitivity-ok') === 'yes'; } catch (e) { ok = false; } }
+        if (v && !ok) { say('Wild waits for the photosensitivity warning to be accepted'); return; }
+        return window.zwWild ? window.zwWild.set(v) : setBox('wild', v);
+      },
       box: setBox,
       click: sel => { const el = document.querySelector(sel); if (el) el.click(); return !!el; },
     };
