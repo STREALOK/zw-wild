@@ -1,4 +1,4 @@
-# zw-wild 0.3.0
+# zw-wild 0.3.1
 
 > **⚠ PHOTOSENSITIVITY WARNING ⚠**
 >
@@ -10,6 +10,14 @@
 Make diagrams, widgets, web pages and pictures **wild**: alive, glowing, moving by themselves. The calm original is never touched; the wild one is a twin beside it.
 
 By Rook, with Claudia, 2026. ZW = Zone Walkers. Its home: https://github.com/STREALOK/zw-wild
+
+## What you will see, step by step
+
+1. **Here, and in the plugin's description:** the warning above.
+2. **When you ask for something wild** (`/zw-wild:wild`, or just «make it wild»): Claude opens its reply with the warning, before any work. When something wild is already open in the same conversation, it adds that the new one stacks on top and is far stronger.
+3. **When the tool writes a wild file:** its output line repeats the warning.
+4. **When you open a wild page, painting or widget:** a red warning banner comes first. Wild stays off until you press «I understand, turn Wild on»; «Keep it calm» leaves it calm. A «⚠ flashing» chip stays next to the Wild switch.
+5. **When you leave it alone:** the autopilot plays its routines, but it never turns Wild on before you said yes.
 
 ## What is inside
 

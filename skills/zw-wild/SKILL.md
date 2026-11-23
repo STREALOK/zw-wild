@@ -25,6 +25,16 @@ Part of zw-wild (Rook, with Claudia, 2026). The code is AGPL-3.0 and these words
 4. **Look, then say.** Look at every picture by eye before writing a word about it. Render the wild result (a headless browser is enough), look at the shot, and say plainly what you did not watch (for example, a timer that fires after the shot).
 5. **Warn, everywhere.** Every wild page and widget carries the photosensitivity warning and keeps Wild off until the viewer accepts it; the autopilot never turns Wild on before that. Never strip the warning out, and say it again in the reply whenever you hand someone a wild thing, louder when several are open at once.
 
+## Warning the person, step by step
+
+Someone using this plugin meets the warning at every step, so they never meet a flash unwarned:
+1. **Before the work:** the first reply to any wild request opens with the warning, word for word:
+
+   **⚠ PHOTOSENSITIVITY WARNING:** wild output has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger with more than one wild thing open at once.
+2. **When it stacks:** from the second wild thing in the same conversation or page (making another, making the same thing wild again, or showing several wild widgets at once), say plainly that it stacks and is now far stronger.
+3. **When handing it over:** end with a reminder that the file or widget opens with the red warning banner and waits for «I understand», and that the banner must stay in anything shared.
+4. **Sensitive viewers:** if the person says they, or anyone who will watch, are sensitive to flashing light, recommend the calm version first.
+
 ## A mermaid diagram: the widget and its wild layer
 
 - `assets/widget-template.html` is a zoomable widget. It has two deep palettes (A and B), zooms at the cursor with the wheel, pans by drag, has the +, -, 1:1 and fit buttons, and double-click fits it. Zoom resizes the SVG itself, so text stays sharp.
