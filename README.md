@@ -1,4 +1,4 @@
-# zw-wild 0.4.1
+# zw-wild 0.4.2
 
 > **⚠ PHOTOSENSITIVITY WARNING ⚠**
 >
