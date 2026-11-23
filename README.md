@@ -16,12 +16,13 @@ By Rook, with Claudia, 2026. ZW = Zone Walkers. Its home: https://github.com/STR
 1. **Here, and in the plugin's description:** the warning above.
 2. **When you ask for something wild** (`/zw-wild:wild`, or just «make it wild»): Claude opens its reply with the warning, before any work. When something wild is already open in the same conversation, it adds that the new one stacks on top and is far stronger.
 3. **When a wild file is written:** Claude repeats the warning, and so does the tool's output line where the tool is used.
-4. **When you open a wild page, painting or widget:** a red warning banner comes first. Wild stays off until you press «I understand, turn Wild on»; «Keep it calm» leaves it calm. A «⚠ flashing» chip stays next to the Wild switch.
-5. **When you leave it alone:** the autopilot plays its routines, but it never turns Wild on before you said yes.
+4. **When you open a wild page or painting:** a red warning banner comes first. Wild stays off until you press «I understand, turn Wild on»; «Keep it calm» leaves it calm. The yes holds for that page only: every other wild page asks again. Where the campfire adds its own Wild switch, a «⚠ flashing» chip stays next to it.
+5. **When you open a wild widget:** it moves gently from the start (slow light along the links, breathing boxes, a slow flicker on ghost boxes, under once a second). The fast, flashing Wild waits for its «wild ⚠» button: the first press shows the warning, and every widget asks again, because a second wild widget stacks on the first.
+6. **When you leave it alone:** the autopilot plays its routines, but it never turns Wild on before you said yes on that page.
 
 ## Try it: three examples
 
-No account, key or sign-in is needed, and there is no service to test against: everything happens in your own conversation and folder.
+No account, key or sign-in is needed, and there is no service to test against: everything happens in your own conversation and folder (the diagram widget loads the mermaid library from esm.sh to draw itself).
 
 1. **A diagram.** `/zw-wild:wild a flowchart of how a pull request gets reviewed and merged`. Claude draws it as a zoomable mermaid widget and writes its wild twin beside it (`NAME.html` and `NAME-wild.html`): stars behind it, light running along every link, a wild button.
 2. **A web page.** `Make this page wild: C:\Users\you\site\index.html`. Claude writes `index-wild.html` beside it, with stars, embers, a fire glow and a Wild switch; `index.html` stays as it was.
@@ -30,6 +31,8 @@ No account, key or sign-in is needed, and there is no service to test against: e
 Each one opens with the photosensitivity warning and stays calm until you press «I understand».
 
 ## What is inside
+
+The folder and uploaded versions hold every part below. The directory version holds only the text parts: the skill, the command, the `reference/*.md` files (where the code of every other part lives, as Markdown) and these documents.
 
 | Part | What it does |
 |---|---|
@@ -52,12 +55,12 @@ Use one route at a time, never both.
 
 ## What it never does
 
-- It never turns Wild on before the photosensitivity warning has been accepted, not even through the autopilot.
+- It never turns Wild on before the photosensitivity warning has been accepted on that page or widget, not even through the autopilot.
 
 - It has no hooks, so nothing fires on its own.
 - In the directory version it never runs code: Claude builds wild files by copying the blocks in `reference/`.
-- It collects no data and calls nothing on the network. The one exception is the widget template, which loads the mermaid library from esm.sh, as the Claude app itself does.
-- It never writes over a file.
+- It collects no data and calls nothing on the network. The one exception is the widget template, which loads the mermaid library from esm.sh; if that fails, it tries a local copy at `../devtools/vendor/mermaid/mermaid.min.js` beside the widget file, if one is there.
+- It never writes over a file it did not make: the tool's `--update` refreshes only a living painting the tool made itself.
 - Everything honours `prefers-reduced-motion`.
 
 ## Support and security

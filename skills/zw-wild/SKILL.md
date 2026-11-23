@@ -19,20 +19,20 @@ Part of zw-wild (Rook, with Claudia, 2026). The code is AGPL-3.0 and these words
 
 ## The five rules
 
-1. **Keep the calm one whole.** Never edit the original. The wild one is a twin beside it (`NAME-wild.html`), and both stay as options. `wildify.py` refuses to write over anything.
+1. **Keep the calm one whole.** Never edit the original. The wild one is a twin beside it (`NAME-wild.html`), and both stay as options. `wildify.py` refuses to write over anything, except that `--update` refreshes a living painting it made itself.
 2. **Never tint the art.** Paintings, photos and portraits keep their own colours. A colour drift goes on the canvases, the frames and the diagram lines, never on the picture.
 3. **Private stays private.** A page that shows someone's private pictures or words is never linked from a page meant to be shared. Say which is which.
-4. **Look, then say.** Look at every picture by eye before writing a word about it. Render the wild result (a headless browser is enough), look at the shot, and say plainly what you did not watch (for example, a timer that fires after the shot). In the directory version, check it as «Two shapes» says, without running anything.
-5. **Warn, everywhere.** Every wild page and widget carries the photosensitivity warning and keeps Wild off until the viewer accepts it; the autopilot never turns Wild on before that. Never strip the warning out, and say it again in the reply whenever you hand someone a wild thing, louder when several are open at once.
+4. **Look, then say.** Look at every picture by eye before writing a word about it. Then check the wild result by eye: in the directory version only as «Two shapes» says, without running anything; with code files, render it (a headless browser is enough) and look at the shot. Say plainly what you did not watch (for example, a timer that fires after the shot).
+5. **Warn, everywhere.** Every wild page and widget carries the photosensitivity warning and keeps Wild off until the viewer accepts it; the autopilot never turns Wild on before that. Each page and each widget asks for itself: a yes never carries over to another. Never strip the warning out, and say it again in the reply whenever you hand someone a wild thing, louder when several are open at once.
 
 ## Two shapes of this plugin
 
 - **With code files** (from a folder or an uploaded .plugin): run `scripts/wildify.py` directly; the assets are in `assets/`. The commands further down are for this shape.
-- **The directory version** (text only, the only kind the directory takes from most publishers): every piece of code is a fenced block in `reference/`. In this shape **never write out or run any code**: build the wild twin by hand, as a new file beside the original (never over it), from the blocks:
-  - **A new diagram widget:** copy the block from `reference/widget-template.md`. Replace the `flowchart TB` source inside ``const body = `...`;`` with the diagram (any backtick in it becomes a single quote), the lines inside ``const classes = `...`;`` with its class lines, `'tangle-'` in `mermaid.render('tangle-' + k, src)` with a short id of your own, and `LEGEND LINE PER DIAGRAM` with the legend line. That is the calm widget. Its wild twin is the same text, a blank line, then the block from `reference/wild-layer.md`.
+- **The directory version** (text only, the only kind the directory takes from most publishers): every piece of code is a fenced block in `reference/`. In this shape **never run code and never write a script file**: build the wild twin by hand, as one new HTML file put together from the blocks (beside the original for a widget or a page, in the working folder for a picture; never over a file):
+  - **A new diagram widget:** copy the block from `reference/widget-template.md`. Replace the `flowchart TB` source inside ``const body = `...`;`` with the diagram (any backtick in it becomes a single quote, and every backslash is doubled), the lines inside ``const classes = `...`;`` with its class lines, `'tangle-'` in `mermaid.render('tangle-' + k, src)` with a short id of your own, and `LEGEND LINE PER DIAGRAM` with the legend line (write `&lt;` for any `<` in it). That is the calm widget. Its wild twin is the same text, a blank line, then the block from `reference/wild-layer.md`.
   - **An existing widget of the template:** write `NAME-wild.html`: the widget's text, a blank line, then the block from `reference/wild-layer.md`.
   - **A web page:** write `PAGE-wild.html`: the page's text with two scripts inserted just before its last `</body>`: `<script>`, the block from `reference/campfire.md`, `</script>`, then `<script>`, the block from `reference/autopilot.md`, `</script>`.
-  - **A picture:** look at it first. Copy the block from `reference/painting.md` to `IMAGE-stem-living.html`, and replace `__TITLE__` with the title, `/*ZW_WILD_DATA*/{}/*END*/` with the data as one JSON object (`title`, `caption`, `src` = the picture's path relative to the page, URL-encoded, and the `spots` described below; write `<\/` for any `</` inside it), and `/*ZW_WILD_AUTOPILOT*/` with the block from `reference/autopilot.md`.
+  - **A picture:** look at it first. Copy the block from `reference/painting.md` to `IMAGE-stem-living.html`, and replace `__TITLE__` with the title (HTML-escaped: `&amp;`, `&lt;`, `&gt;`, `&quot;`), `/*ZW_WILD_DATA*/{}/*END*/` with the data as one JSON object (`title`, `caption`, `src` = the picture's path relative to the page, URL-encoded, and the `spots` described below; write `<\/` for any `</` inside it), and `/*ZW_WILD_AUTOPILOT*/` with the block from `reference/autopilot.md`.
   - **Checking it:** show a widget in the chat's own widget view, or ask the person to open the file and say what they see. Do not start a browser or any other program for it; if nothing was rendered, say so.
   - `reference/wildify.md` holds the tool itself, for a person who wants to save it and run it on their own machine. In this shape Claude never writes it out or runs it.
 
@@ -101,7 +101,7 @@ This writes `PAGE-wild.html` with two scripts inline before `</body>`.
 
     The helper `w` has `say`, `hold`, `alive`, `wild`, `box(id, on)`, `click(selector)` and `$`.
 
-When a page deserves more than the kit (a living painting, cards that turn, a map whose trains move), build it by hand. Keep the same rules and the same switches (`#wild`, `?wild=1`, `?autopilot=0`), and load the autopilot.
+When a page deserves more than the kit (a living painting, cards that turn, a map whose trains move) and the person asks for it, build it by hand as their own page; in the directory version, stay with the blocks in `reference/` and say what more could be built. Keep the same rules and the same switches (`#wild`, `?wild=1`, `?autopilot=0`), and load the autopilot.
 
 ## A picture: the living painting
 

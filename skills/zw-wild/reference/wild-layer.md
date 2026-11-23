@@ -43,7 +43,7 @@ Generated from `assets/wild-layer.html` for the copy of zw-wild that carries its
   let wild = false;
   // ⚠ Photosensitivity gate: wild has flashing, colour cycling and fast motion; the first click shows the warning.
   const WARN = "⚠ PHOTOSENSITIVITY WARNING ⚠ Wild mode has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger when Wild is used more than once at the same time (several wild pages or widgets open together, or Wild on top of Wild). If you or anyone watching is sensitive to flashing light, keep it calm.";
-  let accepted = false; try { accepted = localStorage.getItem('zw-wild-photosensitivity-ok') === 'yes'; } catch (e) {}
+  let accepted = false;   // nothing is kept: every widget asks again, since a second wild widget stacks on the first
   const ww = document.createElement('div'); ww.id = 'wwarn'; ww.setAttribute('role', 'alert');
   const wt = document.createElement('div'); wt.textContent = WARN; ww.appendChild(wt);
   const wr = document.createElement('div'); wr.className = 'wrow'; ww.appendChild(wr);
@@ -52,7 +52,7 @@ Generated from `assets/wild-layer.html` for the copy of zw-wild that carries its
   wr.appendChild(wy); wr.appendChild(wn); vp.appendChild(ww);
   for (const el of [ww, wy, wn]) { el.addEventListener('pointerdown', e => e.stopPropagation()); el.addEventListener('dblclick', e => e.stopPropagation()); el.addEventListener('wheel', e => e.stopPropagation()); }
   const setWild = v => { wild = v; btn.classList.toggle('on', wild); vp.classList.toggle('wild', wild); };
-  wy.addEventListener('click', e => { e.stopPropagation(); accepted = true; try { localStorage.setItem('zw-wild-photosensitivity-ok', 'yes'); } catch (er) {} ww.style.display = 'none'; setWild(true); });
+  wy.addEventListener('click', e => { e.stopPropagation(); accepted = true; ww.style.display = 'none'; setWild(true); });
   wn.addEventListener('click', e => { e.stopPropagation(); ww.style.display = 'none'; });
   btn.addEventListener('pointerdown', e => e.stopPropagation());
   btn.addEventListener('dblclick', e => e.stopPropagation());

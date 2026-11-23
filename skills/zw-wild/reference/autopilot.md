@@ -62,7 +62,7 @@ Generated from `assets/autopilot.js` for the copy of zw-wild that carries its co
       say, $, alive: () => alive(g), hold: ms => hold(g, ms),
       wild: v => {
         let ok = !!(window.zwWild && window.zwWild.accepted);
-        if (!window.zwWild) { try { ok = localStorage.getItem('zw-wild-photosensitivity-ok') === 'yes'; } catch (e) { ok = false; } }
+        if (!window.zwWild) { try { ok = localStorage.getItem('zw-wild-photosensitivity-ok:' + location.pathname) === 'yes'; } catch (e) { ok = false; } }
         if (v && !ok) { say('Wild waits for the photosensitivity warning to be accepted'); return; }
         return window.zwWild ? window.zwWild.set(v) : setBox('wild', v);
       },

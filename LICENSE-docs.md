@@ -6,4 +6,4 @@ The full licence: https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
 Attribution: zw-wild, by Rook, with Claudia, 2026.
 
-The code (`skills/zw-wild/scripts/` and `skills/zw-wild/assets/`) is licensed under the GNU Affero General Public License v3.0; see `LICENSE`.
+The code (`skills/zw-wild/scripts/` and `skills/zw-wild/assets/`, and the same code as the fenced blocks in `skills/zw-wild/reference/`) is licensed under the GNU Affero General Public License v3.0; see `LICENSE`.

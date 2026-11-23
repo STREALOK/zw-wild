@@ -26,7 +26,7 @@ Generated from `assets/campfire.js` for the copy of zw-wild that carries its cod
   if (window.__zwCampfire) return;
   window.__zwCampfire = true;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const KEY = 'zw-wild-photosensitivity-ok';
+  const KEY = 'zw-wild-photosensitivity-ok:' + location.pathname;   // one acceptance per page: another wild page asks again
   let accepted = false;
   try { accepted = localStorage.getItem(KEY) === 'yes'; } catch (e) { /* storage blocked: ask every time */ }
   const WARN = '⚠ PHOTOSENSITIVITY WARNING ⚠ Wild mode has flashing and flickering light, colour cycling and fast motion. ' +

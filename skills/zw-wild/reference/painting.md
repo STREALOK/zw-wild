@@ -67,7 +67,7 @@ const DATA = /*ZW_WILD_DATA*/{}/*END*/;
   const wildBox = $('wild');
   // ⚠ Photosensitivity gate: Wild has flashing light and fast motion; it waits for «I understand» (stored per page).
   const WARN = "⚠ PHOTOSENSITIVITY WARNING ⚠ Wild mode has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger when Wild is used more than once at the same time (several wild pages or widgets open together, or Wild on top of Wild). If you or anyone watching is sensitive to flashing light, keep it calm.";
-  const KEY = 'zw-wild-photosensitivity-ok';
+  const KEY = 'zw-wild-photosensitivity-ok:' + location.pathname;   // one acceptance per page: another wild page asks again
   let accepted = false; try { accepted = localStorage.getItem(KEY) === 'yes'; } catch (e) { /* ask every time */ }
   const banner = document.createElement('div'); banner.setAttribute('role', 'alert'); banner.className = 'zwwarn';
   const btext = document.createElement('div'); btext.textContent = WARN; banner.appendChild(btext);

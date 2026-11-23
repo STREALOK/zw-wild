@@ -7,7 +7,7 @@ The tool, for a person who wants to run it on their own machine: save this block
 Generated from `scripts/wildify.py` for the copy of zw-wild that carries its code as Markdown. Part of zw-wild (Rook, with Claudia, 2026); the code is AGPL-3.0.
 
 ```python
-"""wildify.py - make a diagram widget, a web page or a picture wild, as a new file beside the calm one (zw-wild 0.4.0).
+"""wildify.py - make a diagram widget, a web page or a picture wild, as a new file beside the calm one (zw-wild 0.4.1).
 
 !! PHOTOSENSITIVITY WARNING !! Wild output has flashing and flickering light, colour cycling and fast motion and can
 trigger seizures in people with photosensitive epilepsy; several wild things open at once make it much stronger. Every
@@ -90,7 +90,7 @@ def asset(name):
     if os.path.isfile(md):
         with open(md, encoding="utf-8") as f:
             return fenced(f.read())
-    raise Refused(f"asset {name} not found in {ASSETS} nor as {md}; pass --ref <the skill's reference folder>")
+    raise Refused(f"asset {name} not found in {ASSETS} nor as {md}; add --ref <the skill's reference folder>")
 
 
 def twin_path(src, out):
@@ -236,7 +236,7 @@ def cmd_painting(a):
         d = {"title": title or stem, "caption": "", "spots": []}
         starter = stem + "-spots.json"
         if os.path.exists(starter):
-            raise Refused(f"{starter} exists already; pass it with --spots, or move it; nothing written")
+            raise Refused(f"{starter} exists already; give it with --spots, or move it; nothing written")
     if title:
         d["title"] = title
     d.setdefault("title", stem)
@@ -248,7 +248,7 @@ def cmd_painting(a):
     page = page.replace("/*ZW_WILD_AUTOPILOT*/", asset("autopilot.js"), 1)
     if os.path.exists(out):
         if not update:
-            raise Refused(f"{out} exists already; nothing written (pass --update to refresh a living painting this tool made)")
+            raise Refused(f"{out} exists already; nothing written (add --update to refresh a living painting this tool made)")
         done = replace_own(out, page)
     else:
         done = write_new(out, page)
@@ -338,13 +338,14 @@ def selftest():
             # reference-only: every asset read from a Markdown fence must give the same bytes as the code file
             os.mkdir("ref")
             names = ["campfire.js", "autopilot.js", "painting.html", "widget-template.html", "wild-layer.html"]
+            src_of = {nm: asset(nm) for nm in names}   # assets/, or, in a saved copy run with --ref, the fences themselves
             for nm in names:
-                body = open(os.path.join(ASSETS, nm), encoding="utf-8").read()
+                body = src_of[nm]
                 open(os.path.join("ref", os.path.splitext(nm)[0] + ".md"), "w", encoding="utf-8", newline="\n").write("# " + nm + "\n\n```\n" + body + "```\n")
             saved_assets, saved_ref = ASSETS, REF[0]
             globals()["ASSETS"] = os.path.join(d, "no-assets-here"); REF[0] = os.path.join(d, "ref")
             try:
-                n += 1; ok += all(asset(nm) == open(os.path.join(saved_assets, nm), encoding="utf-8").read() for nm in names)
+                n += 1; ok += all(asset(nm) == src_of[nm] for nm in names)
                 n += 1; rp = cmd_page("page.html", out="page-from-ref.html")
                 ok += PAGE_MARK in open(rp, encoding="utf-8").read()
             finally:
@@ -370,7 +371,10 @@ def main(a):
         if not a:
             print(__doc__); return 0
     if a[0] == "--selftest":
-        return selftest()
+        try:
+            return selftest()
+        except Refused as e:
+            print("wildify selftest: REFUSED - " + str(e)); return 2
     try:
         if a[0] == "new":
             p = cmd_new(a[1:])
