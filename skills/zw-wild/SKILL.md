@@ -131,6 +131,6 @@ Everything here honours `prefers-reduced-motion`: the sky stands still, nothing 
 
 ## Before saying it is done
 
-- With code files: `python scripts/wildify.py --selftest` passes (17 cases in 0.4.0).
+- With code files: `python scripts/wildify.py --selftest` passes (18 cases in 0.4.1).
 - Render the wild file (in the directory version, only as «Two shapes» says), look at it, and check three things: the Wild switch or button is there, the motion layer shows, and no picture changed colour.
 - Name the calm original and the wild twin by their full paths, and say what was not watched.

@@ -335,6 +335,9 @@ def selftest():
             n += 1; sp = cmd_painting([os.path.join("art", "my pic.png"), "--out", "starter.html"])             # no spots: page + starter
             ok += os.path.exists("starter.html") and os.path.exists("my pic-spots.json") and "_help" in open("my pic-spots.json", encoding="utf-8").read()
             n += 1; ok += open(os.path.join("art", "my pic.png"), "rb").read() == PNG_1PX                       # the picture untouched
+            # the warning is asked for each page and each widget: a page key carries the page path; the widget layer keeps nothing
+            n += 1; ok += (all("'zw-wild-photosensitivity-ok:' + location.pathname" in asset(nm) for nm in ("campfire.js", "painting.html", "autopilot.js"))
+                           and "'zw-wild-photosensitivity-ok')" not in asset("autopilot.js") and "localStorage" not in asset("wild-layer.html"))
             # reference-only: every asset read from a Markdown fence must give the same bytes as the code file
             os.mkdir("ref")
             names = ["campfire.js", "autopilot.js", "painting.html", "widget-template.html", "wild-layer.html"]
