@@ -7,5 +7,19 @@
   },
   "license": "AGPL-3.0",
   "homepage": "https://github.com/STREALOK/zw-wild",
-  "repository": "https://github.com/STREALOK/zw-wild"
+  "repository": "https://github.com/STREALOK/zw-wild",
+  "displayName": "ZW Wild",
+  "keywords": [
+    "diagrams",
+    "mermaid",
+    "animation",
+    "widgets",
+    "visualization",
+    "creative",
+    "pages",
+    "photosensitivity-warning"
+  ],
+  "privacyPolicyUrl": "https://github.com/STREALOK/zw-wild/blob/main/PRIVACY.md",
+  "supportUrl": "https://github.com/STREALOK/zw-wild/issues",
+  "documentationUrl": "https://github.com/STREALOK/zw-wild#readme"
 }
