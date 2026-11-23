@@ -1,6 +1,6 @@
 # wildify.py
 
-The tool. In a copy of the plugin without `scripts/`, write this block to a file named `wildify.py` in a working folder and run it with `--ref` pointing at this `reference` folder, for example `python wildify.py page PAGE.html --ref <this folder>`.
+The tool, for a person who wants to run it on their own machine: save this block as `wildify.py` and run `python wildify.py --help`; with `--ref` pointing at this `reference` folder it reads every asset from the Markdown here. In the directory version Claude never writes out or runs this block: it builds wild files by hand from the other blocks (the skill's «Two shapes» section).
 
 > ⚠ PHOTOSENSITIVITY WARNING: wild output has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger with more than one wild thing open at once. Keep the warning and the «I understand» step in anything made from this.
 

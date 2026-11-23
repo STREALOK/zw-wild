@@ -3,7 +3,7 @@ name: "zw-wild"
 description: "Use when someone asks to make a diagram, widget, chart or web page «wild» (animated, alive, more motion), or runs /zw-wild:wild. Keeps the calm original whole and builds a wild twin beside it: a zoomable mermaid widget gets the wild layer (stars, light along every link, runners, breathing nodes, a wild button), a page gets the campfire (stars, embers, a Wild switch) and an autopilot that runs routines by itself, and a picture becomes a living painting whose lights breathe and whose things explain themselves. Rules: reduced motion honoured, art never tinted (only canvases), private pages never linked from shared ones, every picture looked at before a word about it, and a render checked by eye before saying it works. ⚠ Wild has flashing light and fast motion (a photosensitivity seizure risk), so every wild thing carries a big warning and waits for «I understand»."
 ---
 
-# zw-wild 0.4.0: make it wild
+# zw-wild 0.4.1: make it wild
 
 > **⚠ PHOTOSENSITIVITY WARNING ⚠**
 >
@@ -22,13 +22,19 @@ Part of zw-wild (Rook, with Claudia, 2026). The code is AGPL-3.0 and these words
 1. **Keep the calm one whole.** Never edit the original. The wild one is a twin beside it (`NAME-wild.html`), and both stay as options. `wildify.py` refuses to write over anything.
 2. **Never tint the art.** Paintings, photos and portraits keep their own colours. A colour drift goes on the canvases, the frames and the diagram lines, never on the picture.
 3. **Private stays private.** A page that shows someone's private pictures or words is never linked from a page meant to be shared. Say which is which.
-4. **Look, then say.** Look at every picture by eye before writing a word about it. Render the wild result (a headless browser is enough), look at the shot, and say plainly what you did not watch (for example, a timer that fires after the shot).
+4. **Look, then say.** Look at every picture by eye before writing a word about it. Render the wild result (a headless browser is enough), look at the shot, and say plainly what you did not watch (for example, a timer that fires after the shot). In the directory version, check it as «Two shapes» says, without running anything.
 5. **Warn, everywhere.** Every wild page and widget carries the photosensitivity warning and keeps Wild off until the viewer accepts it; the autopilot never turns Wild on before that. Never strip the warning out, and say it again in the reply whenever you hand someone a wild thing, louder when several are open at once.
 
 ## Two shapes of this plugin
 
-- **With code files** (from a folder or an uploaded .plugin): run `scripts/wildify.py` directly; the assets are in `assets/`.
-- **The directory version** (code shipped as Markdown, the only kind the directory accepts from most publishers): every piece of code is a fenced block in `reference/`. To run the tool, write the block from `reference/wildify.md` to `wildify.py` in a working folder and run it with `--ref` pointing at this skill's `reference` folder; it reads every asset from the Markdown there. To use an asset by hand, copy its block.
+- **With code files** (from a folder or an uploaded .plugin): run `scripts/wildify.py` directly; the assets are in `assets/`. The commands further down are for this shape.
+- **The directory version** (text only, the only kind the directory takes from most publishers): every piece of code is a fenced block in `reference/`. In this shape **never write out or run any code**: build the wild twin by hand, as a new file beside the original (never over it), from the blocks:
+  - **A new diagram widget:** copy the block from `reference/widget-template.md`. Replace the `flowchart TB` source inside ``const body = `...`;`` with the diagram (any backtick in it becomes a single quote), the lines inside ``const classes = `...`;`` with its class lines, `'tangle-'` in `mermaid.render('tangle-' + k, src)` with a short id of your own, and `LEGEND LINE PER DIAGRAM` with the legend line. That is the calm widget. Its wild twin is the same text, a blank line, then the block from `reference/wild-layer.md`.
+  - **An existing widget of the template:** write `NAME-wild.html`: the widget's text, a blank line, then the block from `reference/wild-layer.md`.
+  - **A web page:** write `PAGE-wild.html`: the page's text with two scripts inserted just before its last `</body>`: `<script>`, the block from `reference/campfire.md`, `</script>`, then `<script>`, the block from `reference/autopilot.md`, `</script>`.
+  - **A picture:** look at it first. Copy the block from `reference/painting.md` to `IMAGE-stem-living.html`, and replace `__TITLE__` with the title, `/*ZW_WILD_DATA*/{}/*END*/` with the data as one JSON object (`title`, `caption`, `src` = the picture's path relative to the page, URL-encoded, and the `spots` described below; write `<\/` for any `</` inside it), and `/*ZW_WILD_AUTOPILOT*/` with the block from `reference/autopilot.md`.
+  - **Checking it:** show a widget in the chat's own widget view, or ask the person to open the file and say what they see. Do not start a browser or any other program for it; if nothing was rendered, say so.
+  - `reference/wildify.md` holds the tool itself, for a person who wants to save it and run it on their own machine. In this shape Claude never writes it out or runs it.
 
 ## Warning the person, step by step
 
@@ -125,6 +131,6 @@ Everything here honours `prefers-reduced-motion`: the sky stands still, nothing 
 
 ## Before saying it is done
 
-- `python scripts/wildify.py --selftest` passes (15 cases in 0.2.0).
-- Render the wild file, look at the shot, and check three things: the Wild switch or button is there, the motion layer shows, and no picture changed colour.
+- With code files: `python scripts/wildify.py --selftest` passes (17 cases in 0.4.0).
+- Render the wild file (in the directory version, only as «Two shapes» says), look at it, and check three things: the Wild switch or button is there, the motion layer shows, and no picture changed colour.
 - Name the calm original and the wild twin by their full paths, and say what was not watched.

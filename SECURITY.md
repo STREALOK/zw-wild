@@ -1,6 +1,6 @@
 # Security
 
-zw-wild, as listed in the directory, is text files and one icon: no hooks, no connectors, no server. Its pages and widgets run in the viewer's own browser, and its optional Python tool runs only when the person asks for it, through Claude's normal permission prompts.
+zw-wild, as listed in the directory, is text files and one icon: no hooks, no connectors, no server, and Claude runs no code for it: it writes wild pages by copying the blocks in `reference/`. Those pages and widgets run in the viewer's own browser. The folder and uploaded versions also carry a Python tool, which runs only when the person asks for it, through Claude's normal permission prompts.
 
 ## Reporting a problem
 

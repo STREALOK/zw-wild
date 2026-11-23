@@ -1,4 +1,4 @@
-# zw-wild 0.4.0
+# zw-wild 0.4.1
 
 > **⚠ PHOTOSENSITIVITY WARNING ⚠**
 >
@@ -15,7 +15,7 @@ By Rook, with Claudia, 2026. ZW = Zone Walkers. Its home: https://github.com/STR
 
 1. **Here, and in the plugin's description:** the warning above.
 2. **When you ask for something wild** (`/zw-wild:wild`, or just «make it wild»): Claude opens its reply with the warning, before any work. When something wild is already open in the same conversation, it adds that the new one stacks on top and is far stronger.
-3. **When the tool writes a wild file:** its output line repeats the warning.
+3. **When a wild file is written:** Claude repeats the warning, and so does the tool's output line where the tool is used.
 4. **When you open a wild page, painting or widget:** a red warning banner comes first. Wild stays off until you press «I understand, turn Wild on»; «Keep it calm» leaves it calm. A «⚠ flashing» chip stays next to the Wild switch.
 5. **When you leave it alone:** the autopilot plays its routines, but it never turns Wild on before you said yes.
 
@@ -36,7 +36,7 @@ Each one opens with the photosensitivity warning and stays calm until you press 
 | `skills/zw-wild/SKILL.md` | The recipe and its five rules: keep the calm one, never tint the art, keep private pages off shared ones, look before you say, and warn everywhere. |
 | `commands/wild.md` | `/zw-wild:wild <thing>`, which runs the skill on what you name. |
 | `skills/zw-wild/scripts/wildify.py` | `new` fills the widget template, `widget` adds the wild layer to a widget, `page` adds the campfire and the autopilot to a page, `painting` makes a picture a living painting. It writes new files only (`--update` refreshes only its own living paintings). Python 3, standard library, `--help` and `--selftest`. |
-| `skills/zw-wild/reference/*.md` | The same code again, each file as one fenced block in Markdown, for the copy of the plugin that can only carry Markdown (the directory version). `wildify.py --ref` reads its assets from there. |
+| `skills/zw-wild/reference/*.md` | The same code again, each file as one fenced block in Markdown, for the copy of the plugin that can only carry Markdown (the directory version). There Claude builds wild things by copying these blocks and never runs code; `reference/wildify.md` is the tool for anyone who wants to save and run it themselves (its `--ref` reads the assets from this folder). |
 | `skills/zw-wild/assets/painting.html` | The living painting: lights that breathe where they sit, motes, glints, a caption per thing on hover and in a tour; in Wild, flares, embers, halos, rising words and speech bubbles. |
 | `skills/zw-wild/assets/widget-template.html` | A zoomable mermaid diagram widget with two deep palettes. |
 | `skills/zw-wild/assets/wild-layer.html` | Stars, light along the links, riders, breathing nodes, ghost flicker, a wild button. |
@@ -55,6 +55,7 @@ Use one route at a time, never both.
 - It never turns Wild on before the photosensitivity warning has been accepted, not even through the autopilot.
 
 - It has no hooks, so nothing fires on its own.
+- In the directory version it never runs code: Claude builds wild files by copying the blocks in `reference/`.
 - It collects no data and calls nothing on the network. The one exception is the widget template, which loads the mermaid library from esm.sh, as the Claude app itself does.
 - It never writes over a file.
 - Everything honours `prefers-reduced-motion`.
