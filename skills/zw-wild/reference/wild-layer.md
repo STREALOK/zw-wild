@@ -1,3 +1,12 @@
+# wild-layer.html
+
+The wild layer for a widget built from the template, with its warning step. Append it after the widget.
+
+> ⚠ PHOTOSENSITIVITY WARNING: wild output has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger with more than one wild thing open at once. Keep the warning and the «I understand» step in anything made from this.
+
+Generated from `assets/wild-layer.html` for the copy of zw-wild that carries its code as Markdown. Part of zw-wild (Rook, with Claudia, 2026); the code is AGPL-3.0.
+
+```html
 <!-- zw-wild wild layer: append it after a widget built from widget-template.html (it needs #vp, #flowA and #flowB).
      Adds stars in the viewport, light flowing along every link, dots riding the links, breathing nodes, glowing boxes,
      a flicker on nodes of class «bad» (ghosts), and a «wild» button (faster, a colour drift on the viewport).
@@ -79,3 +88,4 @@
   requestAnimationFrame(tick);
 })();
 </script>
+```

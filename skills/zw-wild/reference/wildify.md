@@ -1,4 +1,13 @@
-"""wildify.py - make a diagram widget, a web page or a picture wild, as a new file beside the calm one (zw-wild 0.3.0).
+# wildify.py
+
+The tool. In a copy of the plugin without `scripts/`, write this block to a file named `wildify.py` in a working folder and run it with `--ref` pointing at this `reference` folder, for example `python wildify.py page PAGE.html --ref <this folder>`.
+
+> ⚠ PHOTOSENSITIVITY WARNING: wild output has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger with more than one wild thing open at once. Keep the warning and the «I understand» step in anything made from this.
+
+Generated from `scripts/wildify.py` for the copy of zw-wild that carries its code as Markdown. Part of zw-wild (Rook, with Claudia, 2026); the code is AGPL-3.0.
+
+```python
+"""wildify.py - make a diagram widget, a web page or a picture wild, as a new file beside the calm one (zw-wild 0.4.0).
 
 !! PHOTOSENSITIVITY WARNING !! Wild output has flashing and flickering light, colour cycling and fast motion and can
 trigger seizures in people with photosensitive epilepsy; several wild things open at once make it much stronger. Every
@@ -22,6 +31,9 @@ USAGE
         bubbles. Writes IMAGE-stem-living.html in the current folder. Without --spots it also writes a starter
         IMAGE-stem-spots.json to fill in; run again with --spots and --update to refresh the page.
     python wildify.py --selftest
+    Any command takes --ref DIR: read the assets from the Markdown files in DIR (the reference folder), for a copy of
+    the plugin that carries its code as Markdown (the directory version); without it the tool reads assets/ first,
+    then ../reference/ beside it.
     python wildify.py --help
 
 Palette names for the class lines: t1 (deep red), t2 (deep blue), t3 (deep green), his (purple), rook (amber),
@@ -49,6 +61,7 @@ import base64, html, json, os, re, sys, tempfile, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.normpath(os.path.join(HERE, "..", "assets"))
+REF = [os.path.normpath(os.path.join(HERE, "..", "reference"))]
 LAYER_MARK = "zw-wild wild layer"
 PAGE_MARK = "zw-wild campfire"
 PAINT_MARK = "zw-wild living painting"
@@ -60,9 +73,24 @@ class Refused(Exception):
     pass
 
 
+def fenced(text):
+    """The first fenced code block of a Markdown text, exactly as written between its fences."""
+    m = re.search(r"^```[^\n]*\n(.*?)^```[ \t]*$", text, re.S | re.M)
+    if not m:
+        raise Refused("a reference file has no fenced code block")
+    return m.group(1)
+
+
 def asset(name):
-    with open(os.path.join(ASSETS, name), encoding="utf-8") as f:
-        return f.read()
+    p = os.path.join(ASSETS, name)
+    if os.path.isfile(p):
+        with open(p, encoding="utf-8") as f:
+            return f.read()
+    md = os.path.join(REF[0], os.path.splitext(name)[0] + ".md")
+    if os.path.isfile(md):
+        with open(md, encoding="utf-8") as f:
+            return fenced(f.read())
+    raise Refused(f"asset {name} not found in {ASSETS} nor as {md}; pass --ref <the skill's reference folder>")
 
 
 def twin_path(src, out):
@@ -307,6 +335,20 @@ def selftest():
             n += 1; sp = cmd_painting([os.path.join("art", "my pic.png"), "--out", "starter.html"])             # no spots: page + starter
             ok += os.path.exists("starter.html") and os.path.exists("my pic-spots.json") and "_help" in open("my pic-spots.json", encoding="utf-8").read()
             n += 1; ok += open(os.path.join("art", "my pic.png"), "rb").read() == PNG_1PX                       # the picture untouched
+            # reference-only: every asset read from a Markdown fence must give the same bytes as the code file
+            os.mkdir("ref")
+            names = ["campfire.js", "autopilot.js", "painting.html", "widget-template.html", "wild-layer.html"]
+            for nm in names:
+                body = open(os.path.join(ASSETS, nm), encoding="utf-8").read()
+                open(os.path.join("ref", os.path.splitext(nm)[0] + ".md"), "w", encoding="utf-8", newline="\n").write("# " + nm + "\n\n```\n" + body + "```\n")
+            saved_assets, saved_ref = ASSETS, REF[0]
+            globals()["ASSETS"] = os.path.join(d, "no-assets-here"); REF[0] = os.path.join(d, "ref")
+            try:
+                n += 1; ok += all(asset(nm) == open(os.path.join(saved_assets, nm), encoding="utf-8").read() for nm in names)
+                n += 1; rp = cmd_page("page.html", out="page-from-ref.html")
+                ok += PAGE_MARK in open(rp, encoding="utf-8").read()
+            finally:
+                globals()["ASSETS"] = saved_assets; REF[0] = saved_ref
         finally:
             os.chdir(cwd)
     print(f"wildify selftest: {ok}/{n} {'PASS' if ok == n else 'FAIL'}")
@@ -320,6 +362,13 @@ def main(a):
         pass
     if not a or a[0] in ("-h", "--help", "help"):
         print(__doc__); return 0
+    if "--ref" in a:
+        k = a.index("--ref")
+        if k + 1 >= len(a):
+            print("wildify: REFUSED - --ref needs a folder"); return 2
+        REF[0] = os.path.abspath(a[k + 1]); a = a[:k] + a[k + 2:]
+        if not a:
+            print(__doc__); return 0
     if a[0] == "--selftest":
         return selftest()
     try:
@@ -345,3 +394,4 @@ def main(a):
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))
+```

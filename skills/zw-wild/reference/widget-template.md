@@ -1,3 +1,12 @@
+# widget-template.html
+
+The zoomable mermaid widget template. `wildify.py new` fills its diagram, classes, render id and legend.
+
+> ⚠ PHOTOSENSITIVITY WARNING: wild output has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger with more than one wild thing open at once. Keep the warning and the «I understand» step in anything made from this.
+
+Generated from `assets/widget-template.html` for the copy of zw-wild that carries its code as Markdown. Part of zw-wild (Rook, with Claudia, 2026); the code is AGPL-3.0.
+
+```html
 <!-- zw-wild widget template: a zoomable mermaid diagram with two deep palettes (A and B), scroll-wheel zoom at the
      cursor, drag to pan, the +, -, 1:1 and fit buttons, double-click to fit. Fill it with «wildify.py new», or by hand:
      change only the diagram source (const body), the class lines (const classes), the render id and the legend line.
@@ -98,3 +107,4 @@ document.getElementById('zf').onclick = fit;
 requestAnimationFrame(fit);
 if (document.documentElement.classList.contains('sa')) window.addEventListener('resize', fit);
 </script>
+```

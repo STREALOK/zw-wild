@@ -3,7 +3,7 @@ name: "zw-wild"
 description: "Use when someone asks to make a diagram, widget, chart or web page «wild» (animated, alive, more motion), or runs /zw-wild:wild. Keeps the calm original whole and builds a wild twin beside it: a zoomable mermaid widget gets the wild layer (stars, light along every link, runners, breathing nodes, a wild button), a page gets the campfire (stars, embers, a Wild switch) and an autopilot that runs routines by itself. Rules: reduced motion honoured, art never tinted (only canvases), private pages never linked from shared ones, every picture looked at before a word about it, and a render checked by eye before saying it works. ⚠ Wild has flashing light and fast motion (a photosensitivity seizure risk), so every wild thing carries a big warning and waits for «I understand»."
 ---
 
-# zw-wild 0.3.0: make it wild
+# zw-wild 0.4.0: make it wild
 
 > **⚠ PHOTOSENSITIVITY WARNING ⚠**
 >
@@ -24,6 +24,11 @@ Part of zw-wild (Rook, with Claudia, 2026). The code is AGPL-3.0 and these words
 3. **Private stays private.** A page that shows someone's private pictures or words is never linked from a page meant to be shared. Say which is which.
 4. **Look, then say.** Look at every picture by eye before writing a word about it. Render the wild result (a headless browser is enough), look at the shot, and say plainly what you did not watch (for example, a timer that fires after the shot).
 5. **Warn, everywhere.** Every wild page and widget carries the photosensitivity warning and keeps Wild off until the viewer accepts it; the autopilot never turns Wild on before that. Never strip the warning out, and say it again in the reply whenever you hand someone a wild thing, louder when several are open at once.
+
+## Two shapes of this plugin
+
+- **With code files** (from a folder or an uploaded .plugin): run `scripts/wildify.py` directly; the assets are in `assets/`.
+- **The directory version** (code shipped as Markdown, the only kind the directory accepts from most publishers): every piece of code is a fenced block in `reference/`. To run the tool, write the block from `reference/wildify.md` to `wildify.py` in a working folder and run it with `--ref` pointing at this skill's `reference` folder; it reads every asset from the Markdown there. To use an asset by hand, copy its block.
 
 ## Warning the person, step by step
 

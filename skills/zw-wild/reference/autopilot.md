@@ -1,3 +1,12 @@
+# autopilot.js
+
+The autopilot: routines that run by themselves; it never turns Wild on before the warning is accepted. Put it inline after the campfire.
+
+> ⚠ PHOTOSENSITIVITY WARNING: wild output has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger with more than one wild thing open at once. Keep the warning and the «I understand» step in anything made from this.
+
+Generated from `assets/autopilot.js` for the copy of zw-wild that carries its code as Markdown. Part of zw-wild (Rook, with Claudia, 2026); the code is AGPL-3.0.
+
+```js
 /* zw-wild autopilot: wild routines that run themselves, like a screensaver that hands back control at the first touch.
    A pill at the bottom of the page shows what it is doing; click it to switch it on or off. It starts when the page
    loads, and again after 45 seconds with no mouse, key or wheel. «?autopilot=0» keeps it off at load. Reduced motion:
@@ -75,3 +84,4 @@
   }
   if (Q.get('autopilot') !== '0' && !reduce) { on = true; run(++gen); }
 })();
+```

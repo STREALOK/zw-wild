@@ -1,3 +1,12 @@
+# painting.html
+
+The living painting page template. `wildify.py painting` fills its data and inlines the autopilot.
+
+> ⚠ PHOTOSENSITIVITY WARNING: wild output has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger with more than one wild thing open at once. Keep the warning and the «I understand» step in anything made from this.
+
+Generated from `assets/painting.html` for the copy of zw-wild that carries its code as Markdown. Part of zw-wild (Rook, with Claudia, 2026); the code is AGPL-3.0.
+
+```html
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>__TITLE__</title>
@@ -164,3 +173,4 @@ const DATA = /*ZW_WILD_DATA*/{}/*END*/;
 /*ZW_WILD_AUTOPILOT*/
 </script>
 </body></html>
+```

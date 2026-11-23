@@ -1,4 +1,4 @@
-# zw-wild 0.3.1
+# zw-wild 0.4.0
 
 > **⚠ PHOTOSENSITIVITY WARNING ⚠**
 >
@@ -26,6 +26,7 @@ By Rook, with Claudia, 2026. ZW = Zone Walkers. Its home: https://github.com/STR
 | `skills/zw-wild/SKILL.md` | The recipe and its four rules: keep the calm one, never tint the art, keep private pages off shared ones, look before you say. |
 | `commands/wild.md` | `/zw-wild:wild <thing>`, which runs the skill on what you name. |
 | `skills/zw-wild/scripts/wildify.py` | `new` fills the widget template, `widget` adds the wild layer to a widget, `page` adds the campfire and the autopilot to a page, `painting` makes a picture a living painting. It writes new files only (`--update` refreshes only its own living paintings). Python 3, standard library, `--help` and `--selftest`. |
+| `skills/zw-wild/reference/*.md` | The same code again, each file as one fenced block in Markdown, for the copy of the plugin that can only carry Markdown (the directory version). `wildify.py --ref` reads its assets from there. |
 | `skills/zw-wild/assets/painting.html` | The living painting: lights that breathe where they sit, motes, glints, a caption per thing on hover and in a tour; in Wild, flares, embers, halos, rising words and speech bubbles. |
 | `skills/zw-wild/assets/widget-template.html` | A zoomable mermaid diagram widget with two deep palettes. |
 | `skills/zw-wild/assets/wild-layer.html` | Stars, light along the links, riders, breathing nodes, ghost flicker, a wild button. |

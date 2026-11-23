@@ -1,3 +1,12 @@
+# campfire.js
+
+The campfire: stars, embers, a fire glow and the Wild switch with its warning, for any web page. Put it inline before `</body>`.
+
+> ⚠ PHOTOSENSITIVITY WARNING: wild output has flashing and flickering light, colour cycling and fast motion. It can trigger seizures in people with photosensitive epilepsy, and it gets much stronger with more than one wild thing open at once. Keep the warning and the «I understand» step in anything made from this.
+
+Generated from `assets/campfire.js` for the copy of zw-wild that carries its code as Markdown. Part of zw-wild (Rook, with Claudia, 2026); the code is AGPL-3.0.
+
+```js
 /* zw-wild campfire: stars, embers and a fire glow over any page, plus a Wild switch.
 
    ⚠ PHOTOSENSITIVITY WARNING ⚠  Wild mode has flashing and flickering light, colour cycling and fast motion. It can
@@ -132,3 +141,4 @@
   };
   requestAnimationFrame(tick);
 })();
+```
