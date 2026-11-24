@@ -12,7 +12,7 @@ Before any work, open your reply with this warning, word for word:
 If this conversation already holds another wild thing, add a second line: this one stacks on top of it, so the effect is now far stronger.
 If the person says they, or anyone who will watch, are sensitive to flashing light, recommend the calm version first.
 
-Use the zw-wild skill:
+Use the zw-wild skill. First ask and cue it to the person, as its section «Ask first, then cue it to the person» says (skip the questions when they said «just do it»). Then:
 1. Keep the calm original whole and write the wild twin beside it, with `wildify.py` from the skill's `scripts` folder, or, in the directory version (no `scripts` folder), by hand from the blocks in `reference/` as the skill's «Two shapes» section says, never running code or writing a script file: `new` for a fresh mermaid widget, `widget` for an existing one, `page` for a web page, `painting` for a picture (look at it first and place its spots).
 2. Follow its five rules: keep the calm one, never tint the art, keep private pages off shared ones, look before you say, and warn everywhere.
    ⚠ Wild has flashing and flickering light and fast motion and can trigger seizures in people with photosensitive epilepsy, much more so with several wild things open at once: keep the page's warning, and repeat it loudly when you hand the result over.

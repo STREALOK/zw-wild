@@ -1,9 +1,9 @@
 ---
 name: "zw-wild"
-description: "Use when someone asks to make a diagram, widget, chart or web page «wild» (animated, alive, more motion), or runs /zw-wild:wild. Keeps the calm original whole and builds a wild twin beside it: a zoomable mermaid widget gets the wild layer (stars, light along every link, runners, breathing nodes, a wild button), a page gets the campfire (stars, embers, a Wild switch) and an autopilot that runs routines by itself, and a picture becomes a living painting whose lights breathe and whose things explain themselves. Rules: reduced motion honoured, art never tinted (only canvases), private pages never linked from shared ones, every picture looked at before a word about it, and a render checked by eye before saying it works. ⚠ Wild has flashing light and fast motion (a photosensitivity seizure risk), so every wild thing carries a big warning and waits for «I understand»."
+description: "Use when someone asks to make a diagram, widget, chart or web page «wild» (animated, alive, more motion), or runs /zw-wild:wild. Keeps the calm original whole and builds a wild twin beside it: a zoomable mermaid widget gets the wild layer (stars, light along every link, runners, breathing nodes, a wild button), a page gets the campfire (stars, embers, a Wild switch) and an autopilot that runs routines by itself, and a picture becomes a living painting whose lights breathe and whose things explain themselves. Rules: reduced motion honoured, art never tinted (only canvases), private pages never linked from shared ones, every picture looked at before a word about it, and a render checked by eye before saying it works. It asks first, briefly, and cues each wild thing to the person and their page. ⚠ Wild has flashing light and fast motion (a photosensitivity seizure risk), so every wild thing carries a big warning and waits for «I understand»."
 ---
 
-# zw-wild 0.4.2: make it wild
+# zw-wild 0.5.0: make it wild
 
 > **⚠ PHOTOSENSITIVITY WARNING ⚠**
 >
@@ -24,6 +24,27 @@ Part of zw-wild (Rook, with Claudia, 2026). The code is AGPL-3.0 and these words
 3. **Private stays private.** A page that shows someone's private pictures or words is never linked from a page meant to be shared. Say which is which.
 4. **Look, then say.** Look at every picture by eye before writing a word about it. Then check the wild result by eye: in the directory version only as «Two shapes» says, without running anything; with code files, render it (a headless browser is enough) and look at the shot. Say plainly what you did not watch (for example, a timer that fires after the shot).
 5. **Warn, everywhere.** Every wild page and widget carries the photosensitivity warning and keeps Wild off until the viewer accepts it; the autopilot never turns Wild on before that. Each page and each widget asks for itself: a yes never carries over to another. Never strip the warning out, and say it again in the reply whenever you hand someone a wild thing, louder when several are open at once.
+
+## Ask first, then cue it to the person
+
+Every wild thing is made for someone. Before building, ask in one short message (skip it when the person says «just do it» or has already said):
+1. **How wild:** a gentle glow, the full Wild, or wild on top of wild.
+2. **Who will watch:** just them, friends, or the public. If anyone sensitive to flashing light might watch, start calm.
+3. **What stays untouched:** pictures, text, a part of the page.
+4. **Private or shareable.**
+
+Then cue it to them, from what is in front of you:
+- **The page's own subject picks the particles:** snow for winter, sparks for a workshop, petals for a garden, bubbles for water, embers for a fire or a night, stars for space.
+- **The page's own colours pick the glow and particle colours**, never the art's (rule 2).
+- **Their own words** from the conversation, and the page's own headings, name the autopilot's lines.
+- **Write it as a theme.** With code files: `python scripts/wildify.py page PAGE.html --theme theme.json`. In the directory version: put `<script>window.ZW_WILD_THEME = {...};</script>` just before the campfire block. Keys: `particles` (embers, sparks, bubbles, snow, petals, stars), `particleColor`, `glow` and `starColor` (each `"r,g,b"`), and `words` (`wild`, `tour`, `scroll`, `quiet`). Leave a key out and the classic campfire fills it in.
+
+## How far it goes
+
+From a soft glow on one page to rewiring a whole program's look, depending on the context and how strongly the person wants it:
+- **A page or a widget:** the kit, themed as above.
+- **A picture:** the living painting.
+- **Something bigger** (a game's shaders, an app's visuals): built by hand, only on the person's own work or with its owner's permission, always as a twin beside the original (rule 1), with the same warning and «I understand» step wherever it can show one. Say plainly what changed and where the calm original is.
 
 ## Two shapes of this plugin
 

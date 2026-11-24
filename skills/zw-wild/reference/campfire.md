@@ -101,6 +101,13 @@ Generated from `assets/campfire.js` for the copy of zw-wild that carries its cod
   }
   addEventListener('resize', size);
   size();
+  // Theme (zw-wild 0.5.0): cue the fire to the person and the page. Set window.ZW_WILD_THEME before this script, e.g.
+  // { particles: 'snow', particleColor: '235,245,255', glow: '120,170,255', starColor: '217,204,255' }.
+  // particles: embers (rise, warm), sparks (rise fast), bubbles (rise slow, rings), snow (fall), petals (fall, sway),
+  // stars (none, only the sky). Colours are 'r,g,b'. Nothing set gives the classic campfire.
+  const TH = Object.assign({ particles: 'embers', particleColor: '255,179,71', glow: '255,150,60', starColor: '217,204,255' },
+    (window.ZW_WILD_THEME && typeof window.ZW_WILD_THEME === 'object') ? window.ZW_WILD_THEME : {});
+  const KIND = { embers: [-1, 1, 1], sparks: [-1, 1.8, .6], bubbles: [-1, .5, 2], snow: [1, .45, 1.2], petals: [1, .35, 2.2], stars: [0, 0, 0] }[TH.particles] || [-1, 1, 1];
   const stars = Array.from({ length: 110 }, () => ({ x: Math.random(), y: Math.random(), r: .4 + Math.random() * 1.2, ph: Math.random() * 6.3 }));
   let embers = [], T = 0, last = performance.now();
   function tick(now) {
@@ -110,23 +117,24 @@ Generated from `assets/campfire.js` for the copy of zw-wild that carries its cod
     cx.clearRect(0, 0, W, H);
     for (const s of stars) {
       cx.globalAlpha = .06 + .3 * (.5 + .5 * Math.sin(T * 2 + s.ph));
-      cx.fillStyle = '#d9ccff';
+      cx.fillStyle = 'rgb(' + TH.starColor + ')';
       cx.beginPath(); cx.arc(s.x * W, s.y * H, s.r, 0, 6.29); cx.fill();
     }
     const g = cx.createRadialGradient(W / 2, H + 20, 10, W / 2, H + 20, 480 * (1 + .1 * Math.sin(T * 9)));
-    g.addColorStop(0, wild ? 'rgba(255,150,60,.30)' : 'rgba(255,150,60,.18)');
-    g.addColorStop(1, 'rgba(255,120,40,0)');
+    g.addColorStop(0, 'rgba(' + TH.glow + (wild ? ',.30)' : ',.18)'));
+    g.addColorStop(1, 'rgba(' + TH.glow + ',0)');
     cx.globalAlpha = 1; cx.fillStyle = g; cx.fillRect(0, 0, W, H);
-    if (!reduce) for (let k = 0; k < (wild ? 3 : 1); k++) if (Math.random() < .6) {
-      embers.push({ x: Math.random() * W, y: H + 10, vx: (Math.random() - .5) * 20, vy: -(40 + Math.random() * 90) * (wild ? 1.7 : 1),
-        life: 4 + Math.random() * 3, max: 7, r: .8 + Math.random() * 1.6 });
+    if (!reduce && KIND[0]) for (let k = 0; k < (wild ? 3 : 1); k++) if (Math.random() < .6) {
+      embers.push({ x: Math.random() * W, y: KIND[0] < 0 ? H + 10 : -10, vx: (Math.random() - .5) * 20,
+        vy: KIND[0] * (40 + Math.random() * 90) * KIND[1] * (wild ? 1.7 : 1),
+        life: (4 + Math.random() * 3) / Math.max(.5, KIND[1]), max: 7 / Math.max(.5, KIND[1]), r: (.8 + Math.random() * 1.6) * KIND[2] });
     }
     for (const e of embers) {
       e.x += e.vx * raw + Math.sin(T * 2 + e.y * .02) * 10 * raw; e.y += e.vy * raw; e.life -= raw;
-      cx.globalAlpha = Math.max(0, e.life / e.max) * .85; cx.fillStyle = '#ffb347';
-      cx.beginPath(); cx.arc(e.x, e.y, e.r, 0, 6.29); cx.fill();
+      cx.globalAlpha = Math.max(0, e.life / e.max) * .85; cx.fillStyle = cx.strokeStyle = 'rgb(' + TH.particleColor + ')';
+      cx.beginPath(); cx.arc(e.x, e.y, e.r, 0, 6.29); if (TH.particles === 'bubbles') cx.stroke(); else cx.fill();
     }
-    embers = embers.filter(e => e.life > 0 && e.y > -20);
+    embers = embers.filter(e => e.life > 0 && e.y > -20 && e.y < H + 20);
     cx.globalAlpha = 1;
     cv.style.filter = wild ? `hue-rotate(${(Math.sin(T * .25) * 14).toFixed(1)}deg)` : '';
     requestAnimationFrame(tick);

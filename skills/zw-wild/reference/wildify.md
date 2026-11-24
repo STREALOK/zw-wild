@@ -7,7 +7,7 @@ The tool, for a person who wants to run it on their own machine: save this block
 Generated from `scripts/wildify.py` for the copy of zw-wild that carries its code as Markdown. Part of zw-wild (Rook, with Claudia, 2026); the code is AGPL-3.0.
 
 ```python
-"""wildify.py - make a diagram widget, a web page or a picture wild, as a new file beside the calm one (zw-wild 0.4.1).
+"""wildify.py - make a diagram widget, a web page or a picture wild, as a new file beside the calm one (zw-wild 0.5.0).
 
 !! PHOTOSENSITIVITY WARNING !! Wild output has flashing and flickering light, colour cycling and fast motion and can
 trigger seizures in people with photosensitive epilepsy; several wild things open at once make it much stronger. Every
@@ -165,12 +165,38 @@ def cmd_widget(src, out=None):
     return write_new(twin_path(src, out), text.rstrip("\n") + "\n\n" + asset("wild-layer.html"))
 
 
-def cmd_page(src, out=None):
+THEME_KEYS = {"particles", "particleColor", "glow", "starColor", "words"}
+PARTICLES = {"embers", "sparks", "bubbles", "snow", "petals", "stars"}
+RGB = re.compile(r"^\d{1,3},\d{1,3},\d{1,3}$")
+
+
+def theme_script(path):
+    """The <script> that sets window.ZW_WILD_THEME from a theme file, or "" with no file (zw-wild 0.5.0)."""
+    if not path:
+        return ""
+    with open(path, encoding="utf-8") as f:
+        try:
+            th = json.load(f)
+        except ValueError as e:
+            raise Refused(f"{path} is not valid JSON ({e}); nothing written")
+    if not isinstance(th, dict) or set(th) - THEME_KEYS:
+        raise Refused(f"a theme holds only {sorted(THEME_KEYS)}; nothing written")
+    if "particles" in th and th["particles"] not in PARTICLES:
+        raise Refused(f"particles must be one of {sorted(PARTICLES)}, got {th['particles']!r}; nothing written")
+    for k in ("particleColor", "glow", "starColor"):
+        if k in th and not (isinstance(th[k], str) and RGB.match(th[k])):
+            raise Refused(f'{k} must be "r,g,b", got {th[k]!r}; nothing written')
+    if "words" in th and not (isinstance(th["words"], dict) and all(isinstance(v, str) for v in th["words"].values())):
+        raise Refused("words must map wild, tour, scroll and quiet to short texts; nothing written")
+    return "<script>window.ZW_WILD_THEME = " + json.dumps(th, ensure_ascii=False).replace("</", "<\\/") + ";</script>\n"
+
+
+def cmd_page(src, out=None, theme=None):
     with open(src, encoding="utf-8") as f:
         text = f.read()
     if is_wild(text):
         raise Refused(f"{src} is wild already; nothing written")
-    kit = ("<script>\n" + asset("campfire.js") + "</script>\n<script>\n" + asset("autopilot.js") + "</script>\n")
+    kit = theme_script(theme) + ("<script>\n" + asset("campfire.js") + "</script>\n<script>\n" + asset("autopilot.js") + "</script>\n")
     i = text.lower().rfind("</body>")
     new = (text[:i] + kit + text[i:]) if i >= 0 else (text.rstrip("\n") + "\n" + kit)
     return write_new(twin_path(src, out), new)
@@ -338,6 +364,16 @@ def selftest():
             # the warning is asked for each page and each widget: a page key carries the page path; the widget layer keeps nothing
             n += 1; ok += (all("'zw-wild-photosensitivity-ok:' + location.pathname" in asset(nm) for nm in ("campfire.js", "painting.html", "autopilot.js"))
                            and "'zw-wild-photosensitivity-ok')" not in asset("autopilot.js") and "localStorage" not in asset("wild-layer.html"))
+            # 0.5.0: a theme cued to the person goes in before the kit; a theme it cannot read is refused, nothing written
+            open("theme.json", "w", encoding="utf-8").write(json.dumps({"particles": "snow", "glow": "120,170,255", "words": {"wild": "a blizzard"}}))
+            n += 1; tp = cmd_page("page.html", out="page-themed.html", theme="theme.json"); tt = open(tp, encoding="utf-8").read()
+            ok += "window.ZW_WILD_THEME = " in tt and '"snow"' in tt and tt.index("ZW_WILD_THEME") < tt.index(PAGE_MARK)
+            open("bad.json", "w", encoding="utf-8").write(json.dumps({"particles": "lava"}))
+            n += 1
+            try:
+                cmd_page("page.html", out="page-bad.html", theme="bad.json")
+            except Refused:
+                ok += not os.path.exists("page-bad.html")
             # reference-only: every asset read from a Markdown fence must give the same bytes as the code file
             os.mkdir("ref")
             names = ["campfire.js", "autopilot.js", "painting.html", "widget-template.html", "wild-layer.html"]
@@ -384,7 +420,7 @@ def main(a):
         elif a[0] == "widget" and len(a) > 1:
             p = cmd_widget(a[1], opt(a, "--out"))
         elif a[0] == "page" and len(a) > 1:
-            p = cmd_page(a[1], opt(a, "--out"))
+            p = cmd_page(a[1], opt(a, "--out"), opt(a, "--theme"))
         elif a[0] == "painting":
             p = cmd_painting(a[1:])
         else:

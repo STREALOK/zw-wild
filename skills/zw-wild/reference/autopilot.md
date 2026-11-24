@@ -44,18 +44,21 @@ Generated from `assets/autopilot.js` for the copy of zw-wild that carries its co
   setInterval(() => { if (!on && !reduce && performance.now() - lastInput > 45000) { on = true; idleStart = true; run(++gen); } }, 2000);
   const alive = g => on && g === gen;
   async function hold(g, ms) { const end = performance.now() + ms; while (alive(g) && performance.now() < end) await wait(250); }
+  // Words cued to the person (zw-wild 0.5.0): window.ZW_WILD_THEME.words = { wild, tour, scroll, quiet } renames the pill's lines.
+  const WORDS = Object.assign({ wild: 'wild for a while', tour: 'a tour', scroll: 'a slow look round', quiet: 'a quiet moment' },
+    (window.ZW_WILD_THEME && window.ZW_WILD_THEME.words) || {});
   const GENERIC = [
-    async w => { if (!w.$('wild')) return; w.say('wild for a while'); w.wild(true); await w.hold(14000); w.wild(false); },
+    async w => { if (!w.$('wild')) return; w.say(WORDS.wild); w.wild(true); await w.hold(14000); w.wild(false); },
     async w => {
       const t = document.querySelector('[data-wild-tour]'); if (!t) return;
-      w.say('a tour'); t.click(); await w.hold(30000); if (w.alive()) t.click();
+      w.say(WORDS.tour); t.click(); await w.hold(30000); if (w.alive()) t.click();
     },
     async w => {
       const max = document.documentElement.scrollHeight - innerHeight; if (max < 40) return;
-      w.say('a slow look round');
+      w.say(WORDS.scroll);
       for (let k = 0; k <= 40 && w.alive(); k++) { scrollTo(0, max * (0.5 - 0.5 * Math.cos(k / 40 * 6.283))); await w.hold(300); }
     },
-    async w => { w.say('a quiet moment'); await w.hold(8000); },
+    async w => { w.say(WORDS.quiet); await w.hold(8000); },
   ];
   function helper(g) {
     return {

@@ -1,4 +1,4 @@
-# zw-wild 0.4.2
+# zw-wild 0.5.0
 
 > **⚠ PHOTOSENSITIVITY WARNING ⚠**
 >
@@ -14,7 +14,7 @@ By Rook, with Claudia, 2026. ZW = Zone Walkers. Its home: https://github.com/STR
 ## What you will see, step by step
 
 1. **Here, and in the plugin's description:** the warning above.
-2. **When you ask for something wild** (`/zw-wild:wild`, or just «make it wild»): Claude opens its reply with the warning, before any work. When something wild is already open in the same conversation, it adds that the new one stacks on top and is far stronger.
+2. **When you ask for something wild** (`/zw-wild:wild`, or just «make it wild»): Claude opens its reply with the warning, before any work. Then it asks a few short questions (how wild, who will watch, what stays untouched, private or shareable) unless you say «just do it», and themes the result to you and your page: snow for a winter page, sparks for a workshop, your own words on the autopilot. When something wild is already open in the same conversation, it adds that the new one stacks on top and is far stronger.
 3. **When a wild file is written:** Claude repeats the warning, and so does the tool's output line where the tool is used.
 4. **When you open a wild page or painting:** a red warning banner comes first. Wild stays off until you press «I understand, turn Wild on»; «Keep it calm» leaves it calm. The yes holds for that page only: every other wild page asks again. Where the campfire adds its own Wild switch, a «⚠ flashing» chip stays next to it.
 5. **When you open a wild widget:** it moves gently from the start (slow light along the links, breathing boxes, a slow flicker on ghost boxes, under once a second). The fast, flashing Wild waits for its «wild ⚠» button: the first press shows the warning, and every widget asks again, because a second wild widget stacks on the first.
@@ -25,8 +25,8 @@ By Rook, with Claudia, 2026. ZW = Zone Walkers. Its home: https://github.com/STR
 No account, key or sign-in is needed, and there is no service to test against: everything happens in your own conversation and folder (the diagram widget loads the mermaid library from esm.sh to draw itself).
 
 1. **A diagram.** `/zw-wild:wild a flowchart of how a pull request gets reviewed and merged`. Claude draws it as a zoomable mermaid widget and writes its wild twin beside it (`NAME.html` and `NAME-wild.html`): stars behind it, light running along every link, a wild button.
-2. **A web page.** `Make this page wild: C:\Users\you\site\index.html`. Claude writes `index-wild.html` beside it, with stars, embers, a fire glow and a Wild switch; `index.html` stays as it was.
-3. **A picture.** `Turn this picture into a living painting: C:\Users\you\Pictures\harbour.png`. Claude looks at the picture first, places a light on each thing in it, and writes `harbour-living.html`: lights that breathe, a caption for each thing on hover and in a tour, and, once Wild is on, flares and embers.
+2. **A web page.** `Make this page wild: C:\my-site\index.html`. Claude writes `index-wild.html` beside it, with stars, embers, a fire glow and a Wild switch; `index.html` stays as it was.
+3. **A picture.** `Turn this picture into a living painting: C:\my-pictures\harbour.png`. Claude looks at the picture first, places a light on each thing in it, and writes `harbour-living.html`: lights that breathe, a caption for each thing on hover and in a tour, and, once Wild is on, flares and embers.
 
 Each one opens with the photosensitivity warning and stays calm until you press «I understand».
 
